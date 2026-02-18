@@ -4,8 +4,12 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
-  base: './', // Esto hace que las rutas sean relativas
+  base: '/pulse-wear-ecommerce/', // <--- IMPORTANTE: El nombre de tu repo en GitHub
 })
+/*export default defineConfig({
+  plugins: [react()],
+  base: './', // Esto hace que las rutas sean relativas
+})*/
 /*export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, '.', '');
     return {

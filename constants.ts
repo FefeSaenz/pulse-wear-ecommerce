@@ -1,6 +1,7 @@
 
 import { Product } from './types';
 
+const BASE_URL = import.meta.env.BASE_URL;
 const DEFAULT_SIZES = ['S', 'M', 'L', 'XL','2XL'];
 
 export const MOCK_PRODUCTS: Product[] = [
@@ -12,8 +13,8 @@ export const MOCK_PRODUCTS: Product[] = [
       /*'https://picsum.photos/seed/vcp1/600/800',
       'https://picsum.photos/seed/vcp1-2/600/800',
       'https://picsum.photos/seed/vcp1-3/600/800'*/
-      './assets/rem mujer 1.jpg',
-      './assets/rem mujer 2.jpg'
+      `${BASE_URL}assets/rem mujer 1.jpg`,
+      `${BASE_URL}assets/rem mujer 2.jpg`
     ],
     category: 'Remeras',
     promo: '3X2',
@@ -27,8 +28,8 @@ export const MOCK_PRODUCTS: Product[] = [
     images: [
       /*'https://picsum.photos/seed/vcp2/600/800',
       'https://picsum.photos/seed/vcp2-2/600/800'*/
-      './assets/remera navy frente.jpg',
-      './assets/remera navy atras.jpg'
+      `${BASE_URL}assets/remera navy frente.jpg`,
+      `${BASE_URL}assets/remera navy atras.jpg`
     ],
     category: 'Remeras',
     sizes: DEFAULT_SIZES,
@@ -41,8 +42,8 @@ export const MOCK_PRODUCTS: Product[] = [
     images: [
       /*'https://picsum.photos/seed/vcp3/600/800',
       'https://picsum.photos/seed/vcp3-2/600/800'*/
-      './assets/remera negra ov frente.jpg',
-      './assets/remera negra ov atras.jpg'
+      `${BASE_URL}assets/remera negra ov frente.jpg`,
+      `${BASE_URL}assets/remera negra ov atras.jpg`
     ],
     category: 'Remeras',
     sizes: DEFAULT_SIZES,
@@ -55,8 +56,8 @@ export const MOCK_PRODUCTS: Product[] = [
     images: [
       /*'https://picsum.photos/seed/vcp4/600/800',
       'https://picsum.photos/seed/vcp4-2/600/800'*/
-      './assets/rem negra 1.jpg',
-      './assets/rem negra 2.jpg'
+      `${BASE_URL}assets/rem negra 1.jpg`,
+      `${BASE_URL}assets/rem negra 2.jpg`
     ],
     category: 'Remeras',
     sizes: DEFAULT_SIZES,
@@ -69,8 +70,8 @@ export const MOCK_PRODUCTS: Product[] = [
     images: [
       /*'https://picsum.photos/seed/vcp5/600/800',
       'https://picsum.photos/seed/vcp5-2/600/800'*/
-      './assets/Blanca_1.png',
-      './assets/Blanca_2.png'
+      `${BASE_URL}assets/Blanca_1.png`,
+      `${BASE_URL}assets/Blanca_2.png`
     ],
     category: 'Remeras',
     promo: 'SALE',
@@ -84,8 +85,8 @@ export const MOCK_PRODUCTS: Product[] = [
     images: [
       /*'https://picsum.photos/seed/vcp6/600/800',
       'https://picsum.photos/seed/vcp6-2/600/800'*/
-      './assets/cargo 1.jpg',
-      './assets/cargo 2.jpg'
+      `${BASE_URL}assets/cargo 1.jpg`,
+      `${BASE_URL}assets/cargo 2.jpg`
     ],
     category: 'Pantalones',
     sizes: ['38', '40', '42', '44'],
