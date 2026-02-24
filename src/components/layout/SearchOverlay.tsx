@@ -11,6 +11,30 @@ interface SearchOverlayProps {
 const SearchOverlay: React.FC<SearchOverlayProps> = ({ isOpen, onClose, searchTerm, onSearchChange }) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
+  // 1. Lógica para cerrar con ESCAPE y buscar con ENTER
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+      if (e.key === 'Enter') {
+        // Al apretar Enter, simplemente cerramos el overlay
+        // Como el input ya actualizó el estado 'searchTerm',
+        // la Home filtrará automáticamente los productos.
+        onClose();
+      }
+    };
+
+    if (isOpen) {
+      window.addEventListener('keydown', handleKeyDown);
+    }
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen, onClose]);
+
+  // 2. Auto-focus al abrir
   useEffect(() => {
     if (isOpen && inputRef.current) {
       inputRef.current.focus();
