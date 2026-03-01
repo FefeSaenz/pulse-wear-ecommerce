@@ -1,6 +1,8 @@
 import React from 'react';
-// Importamos el átomo NavbarLink desde la carpeta ui
-import NavbarLink from '../ui/NavbarLink';
+// Importamos el átomo NavLink desde la carpeta ui
+import NavLink from '../ui/NavLink';
+import { useApp } from '../../context/AppContext';
+
 
 /**
  * PROPS INTERFACE
@@ -27,7 +29,8 @@ const NAV_LINKS = [
 ];
 
 const Header: React.FC<HeaderProps> = ({ onOpenCart, onOpenProfile, onOpenSearch, cartCount }) => {
-  
+  // Consumimos la data real de la API desde nuestro Contexto
+  const { menuItems, logoText } = useApp();
   /**
    * MANEJADOR DE NAVEGACIÓN
    * Lógica centralizada para manejar el scroll suave o la navegación estándar.
@@ -40,26 +43,40 @@ const Header: React.FC<HeaderProps> = ({ onOpenCart, onOpenProfile, onOpenSearch
       element?.scrollIntoView({ behavior: 'smooth' });
     }
   };
-
+  
   return (
     <header className="fixed top-0 left-0 right-0 z-40 bg-white/90 backdrop-blur-md border-b border-gray-100 px-6 h-20 flex items-center justify-between">
       
       {/* LOGO Y NAVEGACIÓN IZQUIERDA */}
       <div className="flex items-center space-x-8">
         <a href="/" className="text-3xl font-black tracking-tighter hover:opacity-80 transition-opacity">
-          PULSE WEAR
+          {/*PULSE WEAR*/}
+          {logoText}
         </a>
         
-        {/* Renderizado dinámico usando el componente atómico NavbarLink */}
-        <nav className="hidden md:flex items-center space-x-6">
+        {/* Renderizado dinámico usando el componente atómico NavLink */}
+        <nav className="hidden md:flex items-center space-x-6 h-full">
+          {/*}
           {NAV_LINKS.map((link) => (
-            <NavbarLink
+            <NavLink
               key={link.label}
               href={link.href}
               label={link.label}
               onClick={(e) => handleNavClick(e, link.href, link.isScroll)}
             />
-          ))}
+          ))} */}
+          {menuItems && menuItems.length > 0 ? (
+            menuItems.map((item) => (
+              <NavLink 
+                key={item.id} 
+                item={item} 
+                onClick={handleNavClick} 
+                className="h-full"
+              />
+            ))
+          ) : (
+            <span className="text-[10px] text-gray-300 animate-pulse">Cargando menú...</span>
+          )}
         </nav>
       </div>
 

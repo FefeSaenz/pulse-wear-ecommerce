@@ -47,7 +47,6 @@ const LocationsSection: React.FC = () => {
           </div>
 
           <div className="h-[450px] bg-gray-100 relative order-1 lg:order-2 overflow-hidden shadow-2xl grayscale hover:grayscale-0 transition-all duration-700">
-            {/* Embedded Google Map focusing on Palermo area for visual context */}
             <iframe
               src="https://maps.google.com/maps?q=-31.731212,-60.531179&t=&z=17&ie=UTF8&iwloc=&output=embed"
               width="100%"

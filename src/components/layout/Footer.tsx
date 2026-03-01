@@ -1,5 +1,6 @@
 import React from 'react';
-import NavbarLink from '../ui/NavbarLink';
+import NavLink from '../ui/NavLink';
+import { useApp } from '../../context/AppContext';
 
 /**
  * FOOTER DATA
@@ -13,7 +14,10 @@ const INFO_LINKS = [
 ];
 
 const Footer: React.FC = () => {
+  //Consumo data de API para categorías
+  const { menuItems } = useApp(); 
   
+
   /**
    * MANEJADOR DE NAVEGACIÓN
    * Mantiene la misma lógica de scroll suave que usamos en el Header.
@@ -33,32 +37,51 @@ const Footer: React.FC = () => {
         
         {/* COLUMNA 1: BRANDING */}
         <div className="md:col-span-2">
-          <h2 className="text-4xl font-black tracking-tighter mb-6">PULSE</h2>
+          <h2 className="text-4xl font-black tracking-tighter mb-6">/ PULSO</h2>
           <p className="text-xs text-gray-400 max-w-sm leading-relaxed uppercase tracking-widest">
-            Diseñado en Paraná. Calidad premium, cortes contemporáneos y estilo urbano duradero.
+            Diseñado en Paraná, Calidad premium, cortes contemporáneos y estilo urbano duradero.
           </p>
         </div>
 
-        {/* COLUMNA 2: INFO LINKS (Usando NavbarLink) */}
+        {/* COLUMNA 2: INFO LINKS (Usando NavLink) */}
         <div>
-          <h4 className="text-[11px] font-black uppercase tracking-[3px] mb-6 text-white">Info</h4>
+          <h4 className="text-[11px] font-black uppercase tracking-[3px] mb-6 text-white">/ Info</h4>
           <ul className="flex flex-col space-y-3">
+            {/*
             {INFO_LINKS.map((link) => (
               <li key={link.label}>
-                <NavbarLink 
+                <NavLink 
                   href={link.href} 
                   label={link.label} 
                   onClick={(e) => handleNavClick(e, link.href, link.isScroll)}
                   className="text-gray-400 hover:text-white" 
                 />
               </li>
-            ))}
+            ))} */}
+
+            {menuItems && menuItems.length > 0 ? (
+              menuItems.map((item) => (
+                <li key={item.id}>
+                  <NavLink 
+                    item={item}
+                    //key={item.id}
+                    onClick={handleNavClick}
+                    showSubmenu={false}
+                    className="!text-gray-400 hover:!text-white !py-1"
+                  />
+                </li>
+
+              ))
+
+            ) : (
+              <span className="text-[10px] text-gray-300 animate-pulse uppercase tracking-widest">Cargando menú...</span>
+            )}
           </ul>
         </div>
 
         {/* COLUMNA 3: NEWSLETTER */}
         <div>
-          <h4 className="text-[11px] font-black uppercase tracking-[3px] mb-6 text-white">Newsletter</h4>
+          <h4 className="text-[11px] font-black uppercase tracking-[3px] mb-6 text-white">/ Newsletter</h4>
           <div className="flex border-b border-gray-700 pb-2 group focus-within:border-white transition-colors">
             <input 
               type="email" 
@@ -76,7 +99,7 @@ const Footer: React.FC = () => {
       {/* COPYRIGHT DINÁMICO */}
       <div className="mt-24 text-center border-t border-gray-900 pt-8">
          <p className="text-[9px] font-black uppercase tracking-[4px] text-gray-600">
-           © {new Date().getFullYear()} PULSE. PARANÁ, ENTRE RÍOS.
+           © {new Date().getFullYear()} PULSO. PARANÁ, ENTRE RÍOS.
          </p>
       </div>
     </footer>

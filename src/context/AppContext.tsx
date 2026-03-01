@@ -1,8 +1,12 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import api from '../api/axios';
+//import api from '../api/axios';
+import { getFrontData } from '../api/axios';
+import { FrontConfig, MenuItem } from '../types/api';
 
 interface AppContextType {
-  data: any | null;
+  frontConfig: FrontConfig | null;
+  menuItems: MenuItem[];
+  logoText: string;
   loading: boolean;
   error: boolean;
 }
@@ -10,16 +14,18 @@ interface AppContextType {
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider = ({ children }: { children: ReactNode }) => {
-  const [data, setData] = useState<any | null>(null);
+  //const [data, setData] = useState<any | null>(null);
+  const [frontConfig, setFrontConfig] = useState<FrontConfig | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
-        // axios.ts ya tiene la baseURL, así que llamamos a la raíz
-        const response = await api.get('/'); 
-        setData(response.data.data);
+        // Usamos la función que ya conoce el endpoint api.json
+        const data = await getFrontData();
+        console.log("Data real de la API:", data);
+        setFrontConfig(data);
       } catch (err) {
         console.error("Error cargando API en el inicio:", err);
         setError(true);
@@ -31,7 +37,13 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   return (
-    <AppContext.Provider value={{ data, loading, error }}>
+    <AppContext.Provider value={{ 
+      frontConfig,
+      menuItems: frontConfig?.menu?.items || [], // Facilitamos el acceso directo
+      logoText: frontConfig?.menu?.logo?.text.toUpperCase() || "PULSO WEAR",
+      loading, 
+      error 
+    }}>
       {children}
     </AppContext.Provider>
   );
