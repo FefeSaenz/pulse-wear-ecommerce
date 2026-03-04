@@ -4,7 +4,7 @@ import CartShippingTracker from './CartShippingTracker';
 import CartRecommendations from './CartRecommendations';
 import CartSummary from './CartSummary';
 import EmptyState from '../ui/EmptyState';
-import { CartItem as CartItemType, Product } from '../../../types';
+import { CartItem as CartItemType, Product } from '../../types/product.types';
 
 interface CartDrawerProps {
   isOpen: boolean;

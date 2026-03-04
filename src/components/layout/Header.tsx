@@ -3,7 +3,6 @@ import React from 'react';
 import NavLink from '../ui/NavLink';
 import { useApp } from '../../context/AppContext';
 
-
 /**
  * PROPS INTERFACE
  * Define las acciones de apertura de modales y el contador del carrito.

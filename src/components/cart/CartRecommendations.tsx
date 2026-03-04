@@ -1,6 +1,6 @@
 import React from 'react';
-import { MOCK_PRODUCTS } from '../../../constants';
-import { Product } from '../../../types';
+import { MOCK_PRODUCTS } from '../../constants/products';
+import { Product } from '../../types/product.types';
 import Price from '../ui/Price';
 
 interface Props {

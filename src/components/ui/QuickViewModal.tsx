@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Product } from '../../../types';
+import { Product } from '../../types/product.types';
 import Modal from './Modal'; // Importamos el componente base
 import Price from './Price'; // Importamos el componente Price
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { FREE_SHIPPING_THRESHOLD } from '../../../constants';
+import { FREE_SHIPPING_THRESHOLD } from '../../constants/products';
 import Price from '../ui/Price';
 
 interface Props {

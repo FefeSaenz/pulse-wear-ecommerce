@@ -1,3 +1,4 @@
+import { Product } from "./product.types";
 // --- ÁTOMOS (Estructuras básicas que se repiten) ---
 
 export interface Link {
@@ -79,6 +80,6 @@ export interface ApiResponse {
   msg: string;
   data: {
     front: FrontConfig;
-    products: any; // Lo tiparemos a fondo cuando hagamos el listado completo
+    products: Product[];
   };
 }

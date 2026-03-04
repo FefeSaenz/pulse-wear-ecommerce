@@ -2,15 +2,15 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 // Contexts
-import { AppProvider } from './src/context/AppContext';
-import { CartProvider, useCart } from './src/context/CartContext';
+import { AppProvider } from './context/AppContext';
+import { CartProvider, useCart } from './context/CartContext';
 
 // Layout Components Globales
-import Header from './src/components/layout/Header';
-import SearchOverlay from './src/components/layout/SearchOverlay';
+import Header from './components/layout/Header';
+import SearchOverlay from './components/layout/SearchOverlay';
 
 // Pages
-import Home from './src/pages/Home/Home';
+import Home from './pages/Home/Home';
 
 const AppContent: React.FC = () => {
   // --- ESTADOS DE INTERFAZ GLOBALES (Necesarios para Header y Search) ---

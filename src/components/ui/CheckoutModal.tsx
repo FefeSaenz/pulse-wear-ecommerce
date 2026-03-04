@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CartItem, Order } from '../../../types';
+import { CartItem, Order } from '../../types/product.types';
 import Modal from './Modal'; // Asegurate de que la ruta sea correcta
 import Price from './Price';
 

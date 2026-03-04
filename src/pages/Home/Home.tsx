@@ -19,8 +19,8 @@ import ProductGrid from '../../components/layout/ProductGrid';
 import LocationsSection from '../../components/layout/LocationsSection';
 
 // Utils & Data
-import { Product } from '../../../types';
-import { MOCK_PRODUCTS } from '../../../constants';
+import { Product } from '../../types/product.types';
+import { MOCK_PRODUCTS } from '../../constants/products';
 
 interface HomeProps {
   searchTerm: string;

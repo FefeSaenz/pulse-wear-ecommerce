@@ -1,5 +1,5 @@
 
-import { Product } from './types';
+import { Product } from '../types/product.types';
 
 const BASE_URL = import.meta.env.BASE_URL;
 const DEFAULT_SIZES = ['S', 'M', 'L', 'XL','2XL'];
