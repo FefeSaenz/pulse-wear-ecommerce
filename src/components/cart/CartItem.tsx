@@ -28,21 +28,21 @@ const CartItem: React.FC<CartItemProps> = ({ item, onUpdateQuantity, onRemove })
           <div className="flex items-center border border-gray-200">
             <button 
               onClick={() => onUpdateQuantity(item.id, item.selectedSize, -1)} 
-              className="w-8 h-8 flex items-center justify-center hover:bg-gray-50"
+              className="w-8 h-8 flex items-center justify-center hover:bg-gray-50 cursor-pointer"
             >
               <i className="fa-solid fa-minus text-[10px]"></i>
             </button>
             <span className="w-8 h-8 flex items-center justify-center text-xs font-bold">{item.quantity}</span>
             <button 
               onClick={() => onUpdateQuantity(item.id, item.selectedSize, 1)} 
-              className="w-8 h-8 flex items-center justify-center hover:bg-gray-50"
+              className="w-8 h-8 flex items-center justify-center hover:bg-gray-50 cursor-pointer"
             >
               <i className="fa-solid fa-plus text-[10px]"></i>
             </button>
           </div>
           <button 
             onClick={() => onRemove(item.id, item.selectedSize)} 
-            className="text-[10px] text-gray-400 hover:text-black underline uppercase tracking-widest"
+            className="text-[10px] text-gray-400 hover:text-black underline uppercase tracking-widest cursor-pointer"
           >
             Eliminar
           </button>

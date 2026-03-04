@@ -93,7 +93,7 @@ const HeroBanner: React.FC<HeroBannerProps> = ({ banners, onCtaClick }) => {
         </h1>
         <button 
           onClick={() => onCtaClick(currentBanner.cta.url)}
-          className="pointer-events-auto bg-white text-black px-12 py-5 text-[11px] font-black uppercase tracking-[4px] hover:bg-black hover:text-white transition-all transform active:scale-95"
+          className="pointer-events-auto bg-white text-black px-12 py-5 text-[11px] font-black uppercase tracking-[4px] hover:bg-black hover:text-white transition-all transform active:scale-95 cursor-pointer"
         >
           {/*Explorar Tienda*/}
           {currentBanner.cta.text || 'Explorar'}
@@ -119,13 +119,13 @@ const HeroBanner: React.FC<HeroBannerProps> = ({ banners, onCtaClick }) => {
       {/* FLECHAS LATERALES (Solo visibles en Desktop hover) */}
       <button 
         onClick={prevSlide}
-        className="hidden md:flex absolute left-8 top-1/2 -translate-y-1/2 z-30 w-12 h-12 items-center justify-center border border-white/20 rounded-full text-white hover:bg-white hover:text-black transition-all opacity-0 group-hover:opacity-100"
+        className="hidden md:flex absolute left-8 top-1/2 -translate-y-1/2 z-30 w-12 h-12 items-center justify-center border border-white/20 rounded-full text-white hover:bg-white hover:text-black transition-all opacity-0 group-hover:opacity-100 cursor-pointer"
       >
         <i className="fa-solid fa-chevron-left"></i>
       </button>
       <button 
         onClick={nextSlide}
-        className="hidden md:flex absolute right-8 top-1/2 -translate-y-1/2 z-30 w-12 h-12 items-center justify-center border border-white/20 rounded-full text-white hover:bg-white hover:text-black transition-all opacity-0 group-hover:opacity-100"
+        className="hidden md:flex absolute right-8 top-1/2 -translate-y-1/2 z-30 w-12 h-12 items-center justify-center border border-white/20 rounded-full text-white hover:bg-white hover:text-black transition-all opacity-0 group-hover:opacity-100 cursor-pointer"
       >
         <i className="fa-solid fa-chevron-right"></i>
       </button>

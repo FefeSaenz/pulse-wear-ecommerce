@@ -22,7 +22,7 @@ const FilterBar: React.FC<FilterBarProps> = ({
           <button 
             key={cat}
             onClick={() => onCategoryChange(cat)}
-            className={`text-[10px] font-black uppercase tracking-[2px] transition-colors whitespace-nowrap ${
+            className={`text-[10px] font-black uppercase tracking-[2px] transition-colors whitespace-nowrap cursor-pointer ${
               activeCategory === cat ? 'text-black border-b-2 border-black' : 'text-gray-300 hover:text-gray-500'
             }`}
           >

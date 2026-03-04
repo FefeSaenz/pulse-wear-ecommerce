@@ -31,7 +31,7 @@ const CartDrawer: React.FC<CartDrawerProps> = (props) => {
         <div className="flex-1 flex flex-col h-full bg-white">
           <div className="p-6 flex items-center justify-between border-b border-gray-100">
             <h2 className="text-sm font-bold uppercase tracking-widest text-black">Mi Carrito</h2>
-            <button onClick={onClose} className="text-gray-400 hover:text-black transition-colors"><i className="fa-solid fa-xmark text-xl"></i></button>
+            <button onClick={onClose} className="text-gray-400 hover:text-black transition-colors cursor-pointer"><i className="fa-solid fa-xmark text-xl"></i></button>
           </div>
 
           <div className="p-6 flex-1 overflow-y-auto custom-scrollbar">

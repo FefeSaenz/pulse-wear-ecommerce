@@ -19,7 +19,7 @@ const CartSummary: React.FC<Props> = ({ subtotal, onCheckout, disabled }) => {
         onClick={onCheckout}
         className="w-full bg-black text-white py-4 px-6 flex items-center justify-center space-x-4 hover:bg-gray-900 transition-colors group disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        <span className="text-[12px] font-black uppercase tracking-[3px]">Iniciar compra</span>
+        <span className="text-[12px] font-black uppercase tracking-[3px] cursor-pointer">Iniciar compra</span>
         <i className="fa-solid fa-arrow-right text-xs group-hover:translate-x-1 transition-transform"></i>
       </button>
     </div>

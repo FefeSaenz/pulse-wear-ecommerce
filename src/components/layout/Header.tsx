@@ -86,7 +86,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenCart, onOpenProfile, onOpenSearch
         {/* BOTÓN BUSCADOR */}
         <button 
           onClick={onOpenSearch} 
-          className="text-gray-800 hover:text-black transition-transform active:scale-95"
+          className="text-gray-800 hover:text-black transition-transform active:scale-95 cursor-pointer"
           aria-label="Buscar"
         >
           <i className="fa-solid fa-magnifying-glass text-lg"></i>
@@ -95,7 +95,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenCart, onOpenProfile, onOpenSearch
         {/* BOTÓN MI PERFIL */}
         <button 
           onClick={onOpenProfile} 
-          className="text-gray-800 hover:text-black transition-transform active:scale-95"
+          className="text-gray-800 hover:text-black transition-transform active:scale-95 cursor-pointer"
           aria-label="Perfil de usuario"
         >
           <i className="fa-regular fa-user text-lg"></i>
@@ -104,7 +104,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenCart, onOpenProfile, onOpenSearch
         {/* BOTÓN CARRITO CON INDICADOR DINÁMICO (Badge) */}
         <button 
           onClick={onOpenCart} 
-          className="relative group transition-transform active:scale-95"
+          className="relative group transition-transform active:scale-95 cursor-pointer"
           aria-label="Abrir carrito"
         >
           <i className="fa-solid fa-cart-shopping text-lg text-gray-800 group-hover:text-black"></i>
