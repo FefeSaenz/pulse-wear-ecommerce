@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PULSE WEAR | Shop</title>
+  <title>PULSO WEAR | Shop</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
@@ -12,6 +12,18 @@
     body {
       font-family: 'Inter', sans-serif;
     }
+    
+    /* --- NUEVA ANIMACIÓN PARA EL HERO --- */
+    @keyframes ken-burns {
+      from { transform: scale(1); }
+      to { transform: scale(1.10); }
+    }
+
+    .animate-ken-burns {
+      animation: ken-burns 6s ease-out forwards;
+    }
+    /* ------------------------------------ */
+
     .custom-scrollbar::-webkit-scrollbar {
       width: 4px;
     }

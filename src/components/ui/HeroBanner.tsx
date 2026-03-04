@@ -64,19 +64,19 @@ const HeroBanner: React.FC<HeroBannerProps> = ({ banners, onCtaClick }) => {
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
-      {/*IMAGENES CON FADE*/}
+      {/*IMAGENES CON FADE DENTRO DEL HERO*/}
       {banners.map((banner, index) => (
         <div
           key={banner.id}
           className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-            index === currentIndex ? 'opacity-100' : 'opacity-0'
+            index === currentIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'
           }`}
         >
           <img 
             src={banner.image} 
             alt={banner.title}
-            className={`w-full h-full object-cover transition-transform duration-[5s] ${
-              index === currentIndex ? 'scale-110 opacity-60' : 'scale-100'
+            className={`w-full h-full object-cover opacity-60  ${
+              index === currentIndex ? 'animate-ken-burns' : ''
             }`}
             
           />
