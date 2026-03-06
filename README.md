@@ -20,6 +20,8 @@ El proyecto sigue una estructura modular y reactiva para facilitar su mantenimie
 - `pages/`: Vistas principales (Home, Productos) que orquestan los componentes.
 - `context/`: Gestión de estado global (Carrito, Órdenes y datos de API).
 - `components/`: Componentes organizados por responsabilidad (Layout, UI, Cart).
+- `utils/mappers.ts`: Implementación del Adapter Pattern para transformar datos crudos de la API en modelos de datos consistentes para la UI.
+- `hooks/`: Lógica de negocio reutilizable y encapsulada (Custom Hooks) para el manejo de filtros y estados complejos.
 
 
 ## ✅ Logros y Avances
@@ -33,10 +35,13 @@ El proyecto sigue una estructura modular y reactiva para facilitar su mantenimie
 - [x] **Optimización de Renderizado:** Uso de `useCallback` y limpieza de efectos (`clearInterval`) para un rendimiento óptimo y sin fugas de memoria.
 - [x] **Arquitectura v4:** Migración completa a Tailwind CSS v4 con integración nativa en Vite para compilación instantánea.
 - [x] **Refactorización Senior:** Reorganización del árbol de archivos eliminando ruido en la raíz y centralizando la lógica en /src.
-- [x] **Tipado Estricto**: Implementación de interfaces de TypeScript para todo el catálogo de productos y flujos de órdenes.
+- [x] **Tipado Estricto:** Implementación de interfaces de TypeScript para todo el catálogo de productos y flujos de órdenes.
+- [x] **Data Mapping & Resiliencia:** Implementación de un Mapper para estandarizar el contrato de la API y asegurar la integridad de la UI (solución de errores en QuickView).
+- [x] **Arquitectura de Hooks:** Desacoplamiento de la lógica de negocio mediante el hook useProductFilters, permitiendo una UI 100% declarativa y reactiva.
+- [x] **Full API Integration (Home):** Migración total de la Home de datos estáticos a consumo dinámico desde el backend.
 
 ## 🛠️ Próximos Pasos
-- [ ] **Mapeo Dinámico:** Reemplazar `MOCK_PRODUCTS` por el feed de la API de Pulso Wear.
-- [ ] **Landing de Categorías:** Desarrollo de rutas dinámicas basadas en los Slugs de la API.
-- [ ] **Filtros Avanzados:** Lógica de filtrado dinámico basada en categorías de la base de datos.
-- [ ] **Checkout integration:** Finalización del flujo de pago y validación de órdenes.
+- [ ] RIP MOCK_PRODUCTS: Limpieza final de datos hardcodeados en componentes secundarios (CartRecommendations).
+- [ ] Router Dinámico & Slugs: Desarrollo de rutas parametrizadas para categorías basadas en los Slugs de la API (/category/:id).
+- [ ] Filtros Avanzados: Implementación de lógica de filtrado dinámico (Server-side o Client-side avanzado).
+- [ ] Persistencia & Checkout: Sincronización con localStorage y finalización del flujo de pago y validación de órdenes.

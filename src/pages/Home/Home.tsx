@@ -1,26 +1,28 @@
-import React, { useState, useMemo } from 'react';
-import { useApp } from '../../context/AppContext'; // Consumo de la API
-import { useCart } from '../../context/CartContext'; // Consumo del Carrito Global
+import React, { useState } from 'react';
+
+// Contexts
+import { useApp } from '@/src/context/AppContext'; // Consumo de la API
+import { useCart } from '@/src/context/CartContext'; // Consumo del Carrito Global
+
+// Hooks & Utils
+//import { mapApiProductToLocal } from '@/src/utils/mappers';
+import { useProductFilters } from '@/src/hooks/useProductFilters';
+import { Product } from '@/src/types/product.types';
+
 
 // Layout Components
-import Footer from '../../components/layout/Footer';
-import AnnouncementBar from '../../components/layout/AnnouncementBar';
-import CartDrawer from '../../components/cart/CartDrawer';
+import Footer from '@/src/components/layout/Footer';
+import AnnouncementBar from '@/src/components/layout/AnnouncementBar';
+import CartDrawer from '@/src/components/cart/CartDrawer';
+import ProductGrid from '@/src/components/layout/ProductGrid';
+import LocationsSection from '@/src/components/layout/LocationsSection';
 
 // UI Components
-import HeroBanner from '../../components/ui/HeroBanner';
-import QuickViewModal from '../../components/ui/QuickViewModal';
-import CheckoutModal from '../../components/ui/CheckoutModal';
-import UserProfile from '../../components/ui/UserProfile';
-
-// Business Components
-import FilterBar from '../../components/ui/FilterBar';
-import ProductGrid from '../../components/layout/ProductGrid';
-import LocationsSection from '../../components/layout/LocationsSection';
-
-// Utils & Data
-import { Product } from '../../types/product.types';
-import { MOCK_PRODUCTS } from '../../constants/products';
+import HeroBanner from '@/src/components/ui/HeroBanner';
+import FilterBar from '@/src/components/ui/FilterBar';
+import QuickViewModal from '@/src/components/ui/QuickViewModal';
+import CheckoutModal from '@/src/components/ui/CheckoutModal';
+import UserProfile from '@/src/components/ui/UserProfile';
 
 interface HomeProps {
   searchTerm: string;
@@ -28,63 +30,32 @@ interface HomeProps {
 }
 
 const Home: React.FC<HomeProps> = ({ searchTerm, setSearchTerm }) => {
-    const { frontConfig, data, loading } = useApp(); // Data de la API disponible aquí
-    const mainBanner = frontConfig?.banners?.[0]; //Primer banner de la lista
-
+    const { frontConfig, loading } = useApp(); // Data de la API disponible aquí
+    
     const { 
-        cart, orders, isCartOpen, setIsCartOpen, isProfileOpen, setIsProfileOpen,
-        isCheckoutOpen, setIsCheckoutOpen, addToCart, updateQuantity, 
-        removeFromCart, handleCheckoutComplete, cartCount 
+        cart, orders, isCartOpen, setIsCartOpen, isProfileOpen, setIsProfileOpen, isCheckoutOpen, setIsCheckoutOpen, addToCart, updateQuantity, removeFromCart, handleCheckoutComplete 
     } = useCart();
 
-    const heroData = {
-        title: mainBanner?.title || "STREET ESSENTIALS",
-        subtitle: mainBanner?.subtitle || "New Era Collection",
-        image: mainBanner?.image || "./assets/herobanner.png",
-        ctaText: mainBanner?.cta?.text || "Explorar tienda"
-    };
-
-    // --- ESTADOS DE NEGOCIO LOCALES (Específicos de la página) ---
+    // --- ESTADOS DE NEGOCIO LOCALES (Estado local de la página)
     const [selectedQuickView, setSelectedQuickView] = useState<Product | null>(null);
+    
+    // 3. Lógica de Negocio extraída del Hook (Custom Hook)
+    const rawProducts = frontConfig?.featured_products?.products || [];
 
-    // Filtering & Search state
-    // --- ESTADOS DE FILTRADO Y BÚSQUEDA ---
-    const [activeCategory, setActiveCategory] = useState('Todos');
-    const [sortBy, setSortBy] = useState<'default' | 'price-low' | 'price-high'>('default');
+    const {
+        filteredProducts,
+        activeCategory,
+        setActiveCategory,
+        sortBy,
+        setSortBy,
+        categories
+    } = useProductFilters({ rawProducts, searchTerm });
 
-    const categories = ['Todos', 'Remeras', 'Pantalones'];
-
-    /*
-        LÓGICA DE FILTRADO DE PRODUCTOS
-        Memorizamos el resultado para evitar cálculos innecesarios en cada render.
-    */
-    const filteredProducts = useMemo(() => {
-        let result = activeCategory === 'Todos' 
-        ? [...MOCK_PRODUCTS] 
-        : MOCK_PRODUCTS.filter(p => p.category === activeCategory);
-
-        // Apply Search
-        if (searchTerm) {
-        const term = searchTerm.toLowerCase();
-        result = result.filter(p => 
-            p.name.toLowerCase().includes(term) || 
-            p.category.toLowerCase().includes(term) ||
-            (p.description && p.description.toLowerCase().includes(term))
-        );
-        }
-
-        // Apply Sort
-        if (sortBy === 'price-low') result.sort((a, b) => a.price - b.price);
-        if (sortBy === 'price-high') result.sort((a, b) => b.price - a.price);
-
-        return result;
-    }, [activeCategory, sortBy, searchTerm]);
-
-    if (loading) return <div className="h-screen flex items-center justify-center font-bold text-xl">Cargando Pulso Wear...</div>;
-        console.log("Data real de la API:", data);
+    // Early return
+    if (loading) return <div className="h-screen flex items-center justify-center font-bold text-xl bg-white">Cargando Pulso Wear...</div>;
+    
     return (
         <>
-            {/* CONTENIDO PRINCIPAL */}
             <main className="flex-grow">
                 
                 <AnnouncementBar 
@@ -117,11 +88,10 @@ const Home: React.FC<HomeProps> = ({ searchTerm, setSearchTerm }) => {
                     searchTerm={searchTerm} 
                     onClearSearch={() => setSearchTerm('')} 
                     onQuickView={setSelectedQuickView} 
-                    onResetFilters={() => {setActiveCategory('Todos'); setSearchTerm('');}} 
+                    onResetFilters={() => { setActiveCategory('Todos'); setSearchTerm(''); }} 
                 />
 
                 <LocationsSection />
-
                 <Footer />
             </main>
 
