@@ -27,17 +27,19 @@ export interface Product {
   price: number;
   original_price: number | null;
   discount_percentage: number | null;
-  images: string[]; // Changed from single image to array
+  images: string[];
   category: string;
   subcategory?: string;
   gender?: string;
+  base_sku?: string;
+  brand?: string;
+  material?: string;
   variants: ProductVariant[]; // Estructura anidada real
   tags?: string;
   active: boolean;
   rating?: number;
   reviews_count?: number;
   //promo?: string;
-  //sizes: string[];
 }
 
 /**

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useOutletContext } from 'react-router-dom';
 
 // Contexts y Utils de PULSO
 import { useApp } from '@/src/context/AppContext';
@@ -9,9 +9,16 @@ import { Product } from '@/src/types/product.types'; // Importamos tu tipo real
 
 // UI Components
 import Price from '@/src/components/ui/Price';
+import ProductCarousel from '@/src/components/ui/ProductCarousel';
+
+interface ProductDetailContext {
+  setSelectedQuickView: (product: Product) => void;
+}
 
 const ProductDetail: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
+
+  const { setSelectedQuickView } = useOutletContext<ProductDetailContext>();
   
   const { allProducts, frontConfig, loading } = useApp();
   const { addToCart } = useCart();
@@ -140,25 +147,55 @@ const ProductDetail: React.FC = () => {
     <div className="max-w-360 mx-auto px-6 py-10 md:py-20 animate-in fade-in duration-500">
       
       {/* BREADCRUMBS */}
-      <nav className="flex items-center text-[10px] font-black uppercase tracking-[2px] text-gray-400 mb-10 overflow-x-auto no-scrollbar whitespace-nowrap">
-        <Link to="/" className="hover:text-black transition-colors">Inicio</Link>
-        <span className="mx-3">/</span>
-        <Link to={`/category/${product.category.toLowerCase()}`} className="hover:text-black transition-colors">{product.category}</Link>
-        <span className="mx-3">/</span>
-        <span className="text-black">{product.name}</span>
+      <nav className="flex flex-wrap items-center text-[10px] font-black uppercase tracking-[2px] text-gray-400 mb-6 md:mb-10 gap-y-2">
+        <Link to="/" className="hover:text-black transition-colors shrink-0">Inicio</Link>
+        <span className="mx-2 md:mx-3 shrink-0">/</span>
+        <Link to={`/category/${product.category.toLowerCase()}`} className="hover:text-black transition-colors shrink-0">{product.category}</Link>
+        <span className="mx-2 md:mx-3 shrink-0">/</span>
+        <span className="text-black truncate">{product.name}</span>
       </nav>
 
-      <div className="flex flex-col md:flex-row gap-12 lg:gap-20">
+      <div className="flex flex-col md:flex-row gap-12 lg:gap-20 ">
         
-        {/* GALERÍA DE IMÁGENES */}
-        <div className="w-full md:w-1/2 flex flex-col gap-4">
+        {/* GALERÍA DE IMÁGENES (Responsiva) */}
+        <div className="w-full md:w-1/2 flex flex-col md:flex-row gap-4 md:gap-6">
+          
+          {/* Miniaturas (Desktop: Izquierda Vertical / Mobile: Abajo Horizontal) */}
+          {product.images && product.images.length > 1 && (
+            <div className="flex md:flex-col gap-3 overflow-x-auto md:overflow-y-auto no-scrollbar order-2 md:order-1 w-full md:w-20 lg:w-24 shrink-0 pb-2 md:pb-0">
+              {product.images.map((img: string, idx: number) => (
+                <button 
+                  key={idx} 
+                  onClick={() => setMainImage(img)}
+                  className={`w-20 md:w-full aspect-4/5 shrink-0 transition-all cursor-pointer rounded-sm flex group overflow-hidden ${
+                    mainImage === img 
+                      ? 'z-10 p-0 border-0 outline-none appearance-none' 
+                      : 'hover:opacity-80 p-0 border-0 outline-none appearance-none bg-transparent'
+                  }`}
+                >
+                  <img 
+                    src={img} 
+                    alt={`${product.name} thumbnail ${idx + 1}`} 
+                    className="block w-full h-full object-cover rounded-sm transition-transform duration-300 scale-[1.01] group-hover:scale-105" 
+                  />
+                </button>
+              ))}
+            </div> 
+          )}
+
           {/* Imagen Principal */}
-          <div className="aspect-[4/5] bg-gray-50 border border-gray-100 rounded-sm overflow-hidden relative group">
+          <div className="flex-1 order-1 md:order-2 aspect-4/5 bg-gray-50 rounded-sm overflow-hidden relative group flex">
+            {/* NUEVO: ETIQUETA DE OFERTA SUPERPUESTA (Z-20 para estar sobre la imagen) */}
+            {(product.discount_percentage || (product.original_price && product.original_price > product.price)) ? (
+              <div className="absolute top-4 left-4 bg-red-600 text-white px-3 py-1.5 text-[10px] font-black uppercase tracking-[3px] z-20 rounded-sm pointer-events-none shadow-md">
+                {product.discount_percentage ? `-${product.discount_percentage}%` : 'Oferta'}
+              </div>
+            ) : null}
             {mainImage ? (
               <img 
                 src={mainImage} 
                 alt={product.name} 
-                className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                className="w-full h-full object-cover object-center scale-[1.01] group-hover:scale-[1.03] transition-transform duration-700 block"
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-gray-300 text-xs font-bold uppercase tracking-widest">
@@ -167,20 +204,6 @@ const ProductDetail: React.FC = () => {
             )}
           </div>
           
-          {/* Miniaturas (Basado en tu array images) */}
-          {product.images && product.images.length > 1 && (
-            <div className="flex gap-4 overflow-x-auto no-scrollbar pb-2 mt-2">
-              {product.images.map((img, idx) => (
-                <button 
-                  key={idx} 
-                  onClick={() => setMainImage(img)}
-                  className={`w-20 md:w-24 aspect-[4/5] border rounded-sm shrink-0 transition-all cursor-pointer ${mainImage === img ? 'border-black' : 'border-gray-200 hover:border-gray-400'}`}
-                >
-                  <img src={img} alt={`${product.name} thumbnail ${idx}`} className="w-full h-full object-cover" />
-                </button>
-              ))}
-            </div> 
-          )}
         </div>
 
         {/* INFO Y COMPRA */}
@@ -188,14 +211,28 @@ const ProductDetail: React.FC = () => {
           {/* Etiqueta / Tag */}
           {product.tags && (
             <span className="inline-block bg-black text-white text-[9px] font-black uppercase tracking-[3px] px-3 py-1.5 w-max mb-6 rounded-sm">
-              {product.tags[0]}
+              {Array.isArray(product.tags) ? product.tags[0] : product.tags}
             </span>
           )}
 
-          {/* Título y Precio */}
-          <h1 className="text-3xl md:text-5xl font-black italic-pulso uppercase tracking-tighter mb-4 leading-none">
+          {/* Título */}
+          <h1 className="text-3xl md:text-5xl font-black italic-pulso uppercase tracking-tighter mb-2 leading-none">
             {product.name}
           </h1>
+
+          {/* SKU y Rating */}
+          <div className="flex flex-wrap items-center gap-4 mb-6 text-[10px] font-bold uppercase tracking-widest text-gray-400">
+            {product.base_sku && <span>SKU: {product.base_sku}</span>}
+            
+            {/* RATING:
+            {product.rating && (
+              <span className="flex items-center gap-1 text-black">
+                ★ {product.rating} <span className="text-gray-400">({product.reviews_count || 0})</span>
+              </span>
+            )}*/}
+          </div>
+
+          {/* Precio */}
           <div className="mb-8 flex items-center gap-4">
              <Price amount={product.price} className="text-2xl font-bold" />
              {product.original_price && (
@@ -219,7 +256,6 @@ const ProductDetail: React.FC = () => {
                       setSelectedSize(null);
                       setError('');
                       
-                      // Opcional: Si el color tiene una imagen específica, la mostramos
                       const variant = product.variants.find(v => v.color.name === color);
                       if (variant?.color.image) {
                         setMainImage(variant.color.image);
@@ -251,8 +287,8 @@ const ProductDetail: React.FC = () => {
                       setSelectedSize(size);
                       setError('');
                     }}
-                    className={`w-12 h-12 border rounded-sm flex items-center justify-center text-[11px] font-bold transition-all cursor-pointer ${
-                      selectedSize === size ? 'bg-black text-white border-black ring-2 ring-black ring-offset-1' : 'bg-white border-gray-200 hover:border-black text-gray-800'
+                    className={`w-12 h-12 border flex items-center justify-center text-[11px] font-bold transition-all cursor-pointer rounded-sm ${
+                      selectedSize === size ? 'bg-black text-white border-black ring-1 ring-black ring-offset-1' : 'bg-white border-gray-200 hover:border-black text-gray-800'
                     }`}
                   >
                     {size}
@@ -272,12 +308,12 @@ const ProductDetail: React.FC = () => {
           {/* Add to Cart Button */}
           <button 
             onClick={handleAddToCart}
-            className="w-full bg-black text-white py-5 rounded-sm text-xs font-black uppercase tracking-[4px] hover:bg-gray-900 transition-colors active:scale-[0.99] mb-8 cursor-pointer"
+            className="w-full bg-black text-white py-5 text-xs font-black uppercase tracking-[4px] hover:bg-gray-900 transition-colors active:scale-[0.99] mb-8 cursor-pointer rounded-sm"
           >
             Agregar al Carrito
           </button>
 
-          {/* Description */}
+          {/* Description y Detalles (Type-Safe) */}
           <div className="border-t border-gray-100 pt-8 mt-4 space-y-8">
             <div>
               <h3 className="text-[10px] font-black uppercase tracking-[2px] text-black mb-4">Descripción</h3>
@@ -285,10 +321,56 @@ const ProductDetail: React.FC = () => {
                 {product.description || 'Prenda premium diseñada para el uso urbano diario. Ofrece la combinación ideal entre confort duradero y cortes contemporáneos.'}
               </p>
             </div>
+            
+            {/* Solo renderiza si hay subcategoría, categoría o género */}
+            {(product.brand || product.material || product.category || product.subcategory || product.gender) && (
+              <div>
+                <h3 className="text-[10px] font-black uppercase tracking-[2px] text-black mb-4">Detalles</h3>
+                <ul className="text-sm text-gray-500 space-y-2">
+                  {product.brand && (
+                    <li className="flex items-start">
+                      <span className="font-bold text-gray-800 min-w-20">Marca:</span> 
+                      <span>{product.brand}</span>
+                    </li>
+                  )}
+                  {product.material && (
+                    <li className="flex items-start">
+                      <span className="font-bold text-gray-800 min-w-20">Material:</span> 
+                      <span>{product.material}</span>
+                    </li>
+                  )}
+                  {product.category && (
+                    <li className="flex items-start">
+                      <span className="font-bold text-gray-800 min-w-20">Categoría:</span> 
+                      <span className="capitalize">{product.category}</span>
+                    </li>
+                  )}
+                  {product.subcategory && (
+                    <li className="flex items-start">
+                      <span className="font-bold text-gray-800 min-w-20">Estilo:</span> 
+                      <span className="capitalize">{product.subcategory}</span>
+                    </li>
+                  )}
+                  {product.gender && (
+                    <li className="flex items-start">
+                      <span className="font-bold text-gray-800 min-w-20">Género:</span> 
+                      <span className="capitalize">{product.gender}</span>
+                    </li>
+                  )}
+                </ul>
+              </div>
+            )}
           </div>
 
         </div>
       </div>
+      {/* NUEVO: CARRUSEL DE PRODUCTOS RELACIONADOS */}
+      {/* Filtramos para no mostrar el producto que el usuario ya está viendo */}
+      <ProductCarousel 
+        title="Lo más buscado" 
+        products={allProducts.filter(p => p.id !== product.id).slice(0, 8)} 
+        onAdd={setSelectedQuickView}
+      />
     </div>
   );
 };

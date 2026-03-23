@@ -69,6 +69,7 @@ const Layout: React.FC = () => {
                 onClose={() => setIsSearchOpen(false)}
                 searchTerm={searchTerm}
                 onSearchChange={setSearchTerm}
+                onSearchSubmit={handleSearch}
             />
             
             <main className="grow">

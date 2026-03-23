@@ -1,21 +1,20 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import ProductCard from '../ui/ProductCard';
 import { Product } from '../../types/product.types';
 
 interface ProductGridProps {
   products: Product[];
-  searchTerm: string;
-  onClearSearch: () => void;
+  searchTerm?: string;
+  onClearSearch?: () => void;
   onQuickView: (product: Product) => void;
-  onResetFilters: () => void;
 }
 
 const ProductGrid: React.FC<ProductGridProps> = ({ 
   products, 
-  searchTerm, 
+  searchTerm = '', 
   onClearSearch, 
-  onQuickView, 
-  onResetFilters 
+  onQuickView
 }) => {
   return (
     <section className="px-6 py-5">
@@ -24,10 +23,10 @@ const ProductGrid: React.FC<ProductGridProps> = ({
           <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
             {products.length} Productos Encontrados {searchTerm && `para "${searchTerm}"`}
           </span>
-          {searchTerm && (
+          {searchTerm && onClearSearch && (
             <button 
               onClick={onClearSearch}
-              className="text-[10px] font-black uppercase tracking-widest text-red-500 hover:text-red-600"
+              className="text-[10px] font-black uppercase tracking-widest text-red-500 hover:text-red-600 cursor-pointer"
             >
               Limpiar búsqueda
             </button>
@@ -47,12 +46,12 @@ const ProductGrid: React.FC<ProductGridProps> = ({
         ) : (
           <div className="text-center py-40">
             <p className="text-xs font-black uppercase tracking-[4px] text-gray-300">No se encontraron productos</p>
-            <button 
-              onClick={onResetFilters}
-              className="mt-6 text-[10px] font-black uppercase tracking-[2px] underline"
+            <Link 
+              to="/productos"
+              className="mt-3 inline-block text-[10px] font-black uppercase tracking-[2px] underline"
             >
               Ver todo el catálogo
-            </button>
+            </Link>
           </div>
         )}
       </div>

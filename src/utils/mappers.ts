@@ -31,5 +31,8 @@ export const mapApiProductToLocal = (apiProd: FeaturedProduct): Product => {
     variants: (apiProd as any).variants || defaultVariants, // Prioriza si la API llegara a traer variantes
     active: true,
     tags: apiProd.badge || undefined,
+    base_sku: apiProd.base_sku || undefined,
+    brand: apiProd.brand || undefined,
+    material: apiProd.material || undefined,
   };
 };

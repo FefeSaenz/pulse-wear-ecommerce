@@ -1,5 +1,5 @@
 import React, { useMemo, useEffect } from 'react';
-import { useSearchParams, useOutletContext, useParams, useNavigate } from 'react-router-dom';
+import { useSearchParams, useOutletContext, useParams, useNavigate, useLocation } from 'react-router-dom';
 
 // Context & Hooks
 import { useApp } from '@/src/context/AppContext';
@@ -14,8 +14,6 @@ import FilterBar from '@/src/components/ui/FilterBar';
 
 interface ProductsContext {
     setSelectedQuickView: (product: Product) => void;
-    searchTerm: string;
-    setSearchTerm: (val: string) => void;
 }
 
 const Products: React.FC = () => {
@@ -24,7 +22,9 @@ const Products: React.FC = () => {
     const { setSelectedQuickView } = useOutletContext<ProductsContext>();
     
     const { category: paramCategory } = useParams<{ category: string }>();
-    const isOffersRoute = window.location.pathname === '/offers';
+
+    const location = useLocation();
+    const isOffersRoute = location.pathname === '/offers';
     const navigate = useNavigate();
 
     // 1. COMBINACIÓN Y NORMALIZACIÓN DE DATA
@@ -164,9 +164,7 @@ const Products: React.FC = () => {
                         searchTerm={searchTerm}
                         onQuickView={setSelectedQuickView}
                         onClearSearch={() => handleFilterChange('search', null)}
-                        onResetFilters={handleClearFilters}
                     />
-                    
                 </main>
             </div>
         </div>

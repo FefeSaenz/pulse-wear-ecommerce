@@ -5,9 +5,10 @@ interface SearchOverlayProps {
   onClose: () => void;
   searchTerm: string;
   onSearchChange: (value: string) => void;
+  onSearchSubmit: (value: string) => void;
 }
 
-const SearchOverlay: React.FC<SearchOverlayProps> = ({ isOpen, onClose, searchTerm, onSearchChange }) => {
+const SearchOverlay: React.FC<SearchOverlayProps> = ({ isOpen, onClose, searchTerm, onSearchChange, onSearchSubmit }) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   // 1. Lógica para cerrar con ESCAPE y buscar con ENTER
@@ -16,8 +17,9 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({ isOpen, onClose, searchTe
       if (e.key === 'Escape') onClose();
       if (e.key === 'Enter') {
         if (searchTerm.trim()) {
-          onSearchChange(searchTerm); // Esto disparará el navigate en el Layout
-          onClose();
+          //onSearchChange(searchTerm); // Esto disparará el navigate en el Layout
+          //onClose();
+          onSearchSubmit(searchTerm);
         }
       }
     };
@@ -29,7 +31,7 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({ isOpen, onClose, searchTe
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isOpen, onClose, searchTerm, onSearchChange]);
+  }, [isOpen, onClose, searchTerm, onSearchSubmit]);
 
   // 2. Auto-focus al abrir
   useEffect(() => {
@@ -41,7 +43,7 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({ isOpen, onClose, searchTe
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] bg-white animate-in slide-in-from-top duration-300">
+    <div className="fixed inset-0 z-100 bg-white animate-in slide-in-from-top duration-300">
       <div className="max-w-7xl mx-auto px-6 h-full flex flex-col">
         <div className="flex items-center justify-between h-20 border-b border-gray-100">
           <span className="text-[10px] font-black uppercase tracking-[4px]">Buscador PULSO</span>
@@ -62,9 +64,9 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({ isOpen, onClose, searchTe
             />
             <div className="mt-8 flex justify-center space-x-4">
               <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Sugerencias:</span>
-              <button onClick={() => onSearchChange('Remera')} className="text-[10px] font-black uppercase tracking-widest underline underline-offset-4">Remeras</button>
-              <button onClick={() => onSearchChange('Pantalón')} className="text-[10px] font-black uppercase tracking-widest underline underline-offset-4">Pantalones</button>
-              <button onClick={() => onSearchChange('Boxy')} className="text-[10px] font-black uppercase tracking-widest underline underline-offset-4">Boxy Fit</button>
+              <button onClick={() => onSearchSubmit('Remera')} className="text-[10px] font-black uppercase tracking-widest underline underline-offset-4 cursor-pointer">Remeras</button>
+              <button onClick={() => onSearchSubmit('Pantalón')} className="text-[10px] font-black uppercase tracking-widest underline underline-offset-4 cursor-pointer">Pantalones</button>
+              <button onClick={() => onSearchSubmit('Boxy')} className="text-[10px] font-black uppercase tracking-widest underline underline-offset-4 cursor-pointer">Boxy Fit</button>
             </div>
           </div>
         </div>

@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 //import api from '../api/axios';
 import { getFrontData } from '../api/axios';
 import { FrontConfig, MenuItem } from '../types/api';
-import { Product } from '../types/product.types'; // Ajustá la ruta si es necesario
+import { Product } from '../types/product.types';
 
 interface AppContextType {
   frontConfig: FrontConfig | null;

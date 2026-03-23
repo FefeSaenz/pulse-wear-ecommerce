@@ -57,6 +57,9 @@ export interface FeaturedProduct {
   slug: string;
   badge?: string;
   url: string;
+  base_sku?: string;
+  brand?: string;
+  material?: string;
 }
 
 // --- ESTRUCTURA GLOBAL ---

@@ -51,6 +51,11 @@ El proyecto sigue una estructura modular y reactiva para facilitar su mantenimie
 - [x] **Navegación SPA Fluida y UX:** Eliminación de recargas de página y aplicación del patrón global de "ScrollToTop" (`useLocation`) para reiniciar la posición del scroll en cada transición de ruta.
 - [x] **Product Detail Page (PDP) & Slugs:** Construcción de la vista individual de producto (`/product/:slug`) con selección dinámica de variantes, validación de stock y fallbacks visuales de data.
 - [x] **Accesibilidad & SEO en Cards (WIP):** Refactorización semántica en las tarjetas de producto (`ProductCard`), aislando la navegación (`<Link>`) de las acciones de modal para habilitar el clic derecho nativo.
+- [x] **Búsqueda Global (Single Source of Truth):** Refactorización del motor de búsqueda (`SearchOverlay`) para utilizar la URL como fuente única de verdad, redirigiendo y parametrizando consultas transversalmente desde cualquier página hacia el catálogo.
+- [x] **Programación Defensiva & Tipado:** Blindaje del componente `ProductGrid` mediante propiedades opcionales (`?`) y renderizado condicional estricto, previniendo errores de ejecución (*crashes*) en vistas sin filtros activos como la Home.
+- [x] **Cross-Selling & UI Responsiva:** Desarrollo del componente `ProductCarousel` con `scroll-snap` nativo para mobile y controles personalizados en desktop. Integración en la PDP para sugerir artículos relacionados ("Lo más buscado").
+- [x] **Enriquecimiento de Producto (PDP):** Ampliación del mapeo de datos de la API (`base_sku`, `brand`, `material`) e implementación de UI responsiva avanzada (galerías adaptables desktop/mobile y etiquetas de descuento dinámicas superpuestas).
+- [x] **Inyección de Dependencias (OutletContext):** Conexión eficiente del estado global de UI (`QuickViewModal`) hacia componentes anidados sin *prop drilling*, utilizando el contexto de React Router para una experiencia SPA ininterrumpida.
 
 ## 🛠️ Próximos Pasos
 - [ ] Refactorización DRY (Don't Repeat Yourself): Extracción de lógica repetida de mapeo de catálogos hacia un custom hook (`useUnifiedCatalog`) y creación de componentes atómicos para estados de carga/vacíos.

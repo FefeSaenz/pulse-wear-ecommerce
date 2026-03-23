@@ -62,7 +62,7 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({ product, onClose, onAdd
                   setActiveImageIndex(idx);
                   setImageError(true);
                 }}
-                className={`aspect-[3/4] border-2 transition-all ${
+                className={`aspect-3/4 border-2 transition-all ${
                   activeImageIndex === idx ? 'border-black' : 'border-transparent opacity-60'
                 }`}
               >

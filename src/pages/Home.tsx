@@ -20,15 +20,13 @@ import banner2 from '@/public/assets/PORTADA PAG WEB PULSO 2.png';
 // Definimos la interfaz del contexto que viene del Layout vía Outlet
 interface HomeContext {
   setSelectedQuickView: (product: Product) => void;
-  searchTerm: string;
-  setSearchTerm: (val: string) => void;
 }
 
 const Home: React.FC = () => {
     const navigate = useNavigate();
-    const { frontConfig, loading } = useApp(); // Data de la API disponible aquí
-    // Obtenemos las funciones y estados globales del Layout
-    const { setSelectedQuickView, searchTerm, setSearchTerm } = useOutletContext<HomeContext>();
+    const { frontConfig, loading } = useApp(); // Data de la API disponible
+
+    const { setSelectedQuickView } = useOutletContext<HomeContext>();
     
     // NORMALIZACIÓN DE PRODUCTOS DESTACADOS
     // Transformamos los FeaturedProduct de la API al tipo Product de la UI
@@ -36,7 +34,6 @@ const Home: React.FC = () => {
         const raw = frontConfig?.featured_products?.products || [];
         return raw.map(mapApiProductToLocal); // Ahora sí son consistentes
     }, [frontConfig]);
-
     
     // LÓGICA DE BANNERS DINÁMICOS CON OVERRIDE LOCAL ---
     const visualBanners = useMemo(() => {
@@ -70,7 +67,7 @@ const Home: React.FC = () => {
         ];
     }, [frontConfig?.banners]);
     
-    // USO DEL HOOK DE FILTRADO (Corregido con 'products')
+    // USO DEL HOOK DE FILTRADO
     const {
         filteredProducts,
         activeCategory,
@@ -80,7 +77,7 @@ const Home: React.FC = () => {
         categories
     } = useProductFilters({
         products: featuredMapped, // <--- Aquí estaba el error de nombre
-        searchTerm
+        searchTerm: ''
     });
 
     // Manejador de navegación para Banners
@@ -116,16 +113,13 @@ const Home: React.FC = () => {
                 categories={categories} 
                 activeCategory={activeCategory} 
                 onCategoryChange={setActiveCategory} 
-                sortBy={sortBy} 
+                sortBy={sortBy}
                 onSortChange={(v) => setSortBy(v as any)} 
             />
 
             <ProductGrid 
-                products={filteredProducts} 
-                searchTerm={searchTerm} 
-                onClearSearch={() => setSearchTerm('')} 
-                onQuickView={setSelectedQuickView} 
-                onResetFilters={() => { setActiveCategory('Todos'); setSearchTerm(''); }} 
+                products={filteredProducts}
+                onQuickView={setSelectedQuickView}  
             />
 
             <LocationsSection />
