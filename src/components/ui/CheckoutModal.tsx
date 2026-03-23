@@ -61,7 +61,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose, cart, on
               }`}
             >
               {s === 1 ? 'Información' : 'Pago'}
-              <div className={`h-[2px] mt-2 mx-auto w-12 transition-colors ${step >= s ? 'bg-black' : 'bg-gray-100'}`} />
+              <div className={`h-0.5 mt-2 mx-auto w-12 transition-colors ${step >= s ? 'bg-black' : 'bg-gray-100'}`} />
             </div>
           ))}
         </div>

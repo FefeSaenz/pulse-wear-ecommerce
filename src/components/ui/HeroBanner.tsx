@@ -113,7 +113,7 @@ const HeroBanner: React.FC<HeroBannerProps> = ({ banners, onCtaClick }) => {
             className="group py-4 px-1" // Área de click más grande para mobile
             aria-label={`Ir al banner ${index + 1}`}
           >
-            <div className={`h-[2px] transition-all duration-500 ${
+            <div className={`h-0.5 transition-all duration-500 ${
               index === currentIndex ? 'w-12 bg-white' : 'w-4 bg-white/30 group-hover:bg-white/60'
             }`} />
           </button>

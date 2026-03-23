@@ -17,7 +17,7 @@ const CartShippingTracker: React.FC<Props> = ({ subtotal }) => {
           ? <>Faltan <Price amount={remaining} /> para el envío gratis</>
           : '¡Envío gratuito bonificado!'}
       </p>
-      <div className="h-[2px] w-full bg-gray-100">
+      <div className="h-0.5 w-full bg-gray-100">
         <div className="h-full bg-black transition-all duration-500" style={{ width: `${progress}%` }} />
       </div>
     </div>

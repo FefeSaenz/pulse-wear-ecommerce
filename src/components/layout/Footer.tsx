@@ -14,10 +14,8 @@ const INFO_LINKS = [
 ];
 
 const Footer: React.FC = () => {
-  //Consumo data de API para categorías
   const { menuItems } = useApp(); 
   
-
   /**
    * MANEJADOR DE NAVEGACIÓN
    * Mantiene la misma lógica de scroll suave que usamos en el Header.
@@ -47,18 +45,6 @@ const Footer: React.FC = () => {
         <div>
           <h4 className="text-[11px] font-black uppercase tracking-[3px] mb-6 text-white">/ Info</h4>
           <ul className="flex flex-col space-y-3">
-            {/*
-            {INFO_LINKS.map((link) => (
-              <li key={link.label}>
-                <NavLink 
-                  href={link.href} 
-                  label={link.label} 
-                  onClick={(e) => handleNavClick(e, link.href, link.isScroll)}
-                  className="text-gray-400 hover:text-white" 
-                />
-              </li>
-            ))} */}
-
             {menuItems && menuItems.length > 0 ? (
               menuItems.map((item) => (
                 <li key={item.id}>
@@ -67,7 +53,7 @@ const Footer: React.FC = () => {
                     //key={item.id}
                     onClick={handleNavClick}
                     showSubmenu={false}
-                    className="!text-gray-400 hover:!text-white !py-1"
+                    className="text-gray-400! hover:text-white! py-1!"
                   />
                 </li>
 

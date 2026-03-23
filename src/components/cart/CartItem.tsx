@@ -11,7 +11,7 @@ interface CartItemProps {
 const CartItem: React.FC<CartItemProps> = ({ item, onUpdateQuantity, onRemove }) => {
   return (
     <div className="flex space-x-4">
-      <div className="w-24 aspect-[3/4] flex-shrink-0 bg-gray-100 overflow-hidden">
+      <div className="w-24 aspect-3/4 shrink-0 bg-gray-100 overflow-hidden">
         <img src={item.images[0]} className="w-full h-full object-cover" alt={item.name} />
       </div>
       <div className="flex-1">

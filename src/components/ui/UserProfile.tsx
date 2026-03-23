@@ -22,7 +22,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose, orders }) =>
       />
 
       <div
-        className={`fixed top-0 right-0 h-full bg-white z-50 w-full max-w-[500px] shadow-2xl transition-transform duration-300 transform ${
+        className={`fixed top-0 right-0 h-full bg-white z-50 w-full max-w-125 shadow-2xl transition-transform duration-300 transform ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >

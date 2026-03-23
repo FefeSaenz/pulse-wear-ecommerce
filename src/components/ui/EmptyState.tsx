@@ -14,7 +14,7 @@ const EmptyState: React.FC<EmptyStateProps> = ({ message, icon, children }) => {
           <i className={`fa-solid ${icon} text-6xl`}></i>
         </div>
       )}
-      <h3 className="text-[11px] font-black uppercase tracking-[4px] text-gray-400 max-w-[250px] leading-relaxed">
+      <h3 className="text-[11px] font-black uppercase tracking-[4px] text-gray-400 max-w-62.5 leading-relaxed">
         {message}
       </h3>
       {children && <div className="mt-10">{children}</div>}

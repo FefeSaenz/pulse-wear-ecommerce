@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 const LOCATIONS = [
@@ -30,10 +29,6 @@ const LocationsSection: React.FC = () => {
                   <p><i className="fa-regular fa-clock mr-2"></i>{loc.hours}</p>
                   <p><i className="fa-solid fa-phone mr-2"></i>{loc.phone}</p>
                 </div>
-                {/*<button className="mt-6 text-[9px] font-black uppercase tracking-[3px] border border-black px-6 py-2 hover:bg-black hover:text-white transition-all">
-
-                  Cómo llegar
-                </button>*/}
                 <a 
                   href={loc.googleMapsLink} 
                   target="_blank" 
@@ -46,7 +41,7 @@ const LocationsSection: React.FC = () => {
             ))}
           </div>
 
-          <div className="h-[450px] bg-gray-100 relative order-1 lg:order-2 overflow-hidden shadow-2xl grayscale hover:grayscale-0 transition-all duration-700">
+          <div className="h-112.5 bg-gray-100 relative order-1 lg:order-2 overflow-hidden shadow-2xl grayscale hover:grayscale-0 transition-all duration-700">
             <iframe
               src="https://maps.google.com/maps?q=-31.731212,-60.531179&t=&z=17&ie=UTF8&iwloc=&output=embed"
               width="100%"

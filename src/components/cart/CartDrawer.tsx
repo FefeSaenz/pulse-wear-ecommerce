@@ -24,7 +24,7 @@ const CartDrawer: React.FC<CartDrawerProps> = (props) => {
     <>
       <div className={`fixed inset-0 bg-black/40 z-50 transition-opacity duration-300 ${isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`} onClick={onClose} />
 
-      <div className={`fixed top-0 right-0 h-full bg-white z-50 w-full max-w-[850px] shadow-2xl transition-transform duration-300 transform flex ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+      <div className={`fixed top-0 right-0 h-full bg-white z-50 w-full max-w-212.5 shadow-2xl transition-transform duration-300 transform flex ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}>
         
         <CartRecommendations onAddFromRec={onAddFromRec} />
 
