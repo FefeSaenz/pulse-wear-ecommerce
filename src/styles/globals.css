@@ -18,7 +18,7 @@
   animation: ken-burns 8s ease-out forwards;
 }
 
-/* --- CUSTOM SCROLLBAR PULSE --- */
+/* --- CUSTOM SCROLLBAR PULSO --- */
 .custom-scrollbar::-webkit-scrollbar {
   width: 3px;
 }

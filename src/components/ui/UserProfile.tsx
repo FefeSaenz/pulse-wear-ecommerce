@@ -36,8 +36,8 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose, orders }) =>
         <div className="p-8 overflow-y-auto h-[calc(100%-80px)] custom-scrollbar">
           <div className="mb-12">
             <h3 className="text-[10px] font-black uppercase tracking-[3px] text-gray-400 mb-6 border-b border-gray-100 pb-2">Información de cuenta</h3>
-            <p className="text-sm font-bold">CLIENTE PULSE</p>
-            <p className="text-xs text-gray-400 mt-1 uppercase tracking-widest">cliente@pulse.com</p>
+            <p className="text-sm font-bold">CLIENTE PULSO</p>
+            <p className="text-xs text-gray-400 mt-1 uppercase tracking-widest">cliente@pulso.com</p>
           </div>
 
           <div>

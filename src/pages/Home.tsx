@@ -59,7 +59,7 @@ const Home: React.FC = () => {
             },
             { 
                 id: 'local-2', 
-                title: 'PULSE MODE', 
+                title: 'PULSO MODE', 
                 subtitle: 'DROP EXCLUSIVO', 
                 image: banner2, 
                 cta: { url: '#', text: 'VER MÁS' } 

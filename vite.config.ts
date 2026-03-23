@@ -8,7 +8,6 @@ export default defineConfig({
     tailwindcss(),
     react()
   ],
-  base: '/pulse-wear-ecommerce/', // Nombre del GitHub
   resolve: {
     alias: {
       // Esto permite que import { ... } from '@/src/...' funcione siempre
@@ -16,27 +15,6 @@ export default defineConfig({
     },
   },
 })
-/*export default defineConfig({
-  plugins: [react()],
-  base: './', // Esto hace que las rutas sean relativas
-})*/
-/*export default defineConfig(({ mode }) => {
-    const env = loadEnv(mode, '.', '');
-    return {
-      server: {
-        port: 3000,
-        host: '0.0.0.0',
-      },
-      plugins: [react()],
-      define: {
-        'process.env.API_KEY': JSON.stringify(env.GEMINI_API_KEY),
-        'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY)
-      },
-      resolve: {
-        alias: {
-          '@': path.resolve(__dirname, '.'),
-        }
-      }
-    };
-});
+/*APACHE: Va a necesitar un archivo llamado .htaccess.
+Cuando pida el dist "Acordarse de crearle un archivo .htaccess en la raíz del hosting que redirija todo al index.html, porque es una SPA.
 */

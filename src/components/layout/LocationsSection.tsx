@@ -3,7 +3,7 @@ import React from 'react';
 
 const LOCATIONS = [
   {
-    name: 'PULSE Paraná',
+    name: 'PULSO Paraná',
     address: 'Buenos Aires 60 - Paseo de las luces, Paraná, Entre Ríos',
     hours: 'Lun - Sáb: 10:00 - 20:00',
     phone: '+54 343 4234 567',
@@ -55,7 +55,7 @@ const LocationsSection: React.FC = () => {
               allowFullScreen={true}
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
-              title="PULSE Location Map"
+              title="PULSO Location Map"
             ></iframe>
           </div>
         </div>
