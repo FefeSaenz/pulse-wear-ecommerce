@@ -23,7 +23,8 @@ El proyecto sigue una estructura modular y reactiva para facilitar su mantenimie
 - `components/`: Componentes organizados por responsabilidad (Layout, UI, Cart).
 - `utils/mappers.ts`: Implementación del Adapter Pattern para transformar y normalizar datos crudos de la API en modelos de datos consistentes para la UI.
 - `hooks/`: Lógica de negocio reutilizable y encapsulada (Custom Hooks) para el manejo de filtros y estados complejos.
-
+- `MobileMenu/ (Pattern)`: Componente de navegación de pantalla completa aislado del Header para optimizar el rendimiento y la mantenibilidad de la UI móvil.
+- `UI/ (Atomics)`: Evolución del átomo NavLink para soportar comportamientos polimórficos (Desktop con submenús vs Mobile brutalista).
 
 ## ✅ Logros y Avances
 - [x] **Estado Global:** Migración exitosa a Context API para desacoplar la lógica del carrito de la UI.
@@ -56,8 +57,14 @@ El proyecto sigue una estructura modular y reactiva para facilitar su mantenimie
 - [x] **Cross-Selling & UI Responsiva:** Desarrollo del componente `ProductCarousel` con `scroll-snap` nativo para mobile y controles personalizados en desktop. Integración en la PDP para sugerir artículos relacionados ("Lo más buscado").
 - [x] **Enriquecimiento de Producto (PDP):** Ampliación del mapeo de datos de la API (`base_sku`, `brand`, `material`) e implementación de UI responsiva avanzada (galerías adaptables desktop/mobile y etiquetas de descuento dinámicas superpuestas).
 - [x] **Inyección de Dependencias (OutletContext):** Conexión eficiente del estado global de UI (`QuickViewModal`) hacia componentes anidados sin *prop drilling*, utilizando el contexto de React Router para una experiencia SPA ininterrumpida.
+- [x] **Mobile-First Navigation**: Reestructuración completa del Header para dispositivos móviles siguiendo estándares de apps nativas (Layout: Hamburguesa/Lupa - Logo Central - Carrito).
+- [x] **Brutalism Design System**: Implementación de un `MobileMenu` con *estética brutalista*, utilizando tipografías masivas, tracking negativo y espaciado compacto para una identidad de marca disruptiva.
+- [x] **UX & Motion**: Integración de transiciones físicas sincronizadas en los paneles laterales (`Drawers`), permitiendo animaciones de entrada/salida fluidas mediante `translate-x y estados de visibilidad`.
+- [x] **Refactorización de Átomos (NavLink)**: Desacoplamiento de estilos fijos en `NavLink.tsx`, permitiendo que el componente sea 100% flexible y se adapte a diferentes contextos de tamaño y peso visual sin conflictos de clases.
+- [x] **Navegación Robusta (Mobile)**: Blindaje del ciclo de navegación en el menú móvil, asegurando el cierre automático del panel y el bloqueo del scroll del body al interactuar con el logo o categorías.
 
 ## 🛠️ Próximos Pasos
+- [ ] Filtros Mobile: Implementación del Drawer de filtros (siguiendo la estética del MobileMenu) para la página de productos.
 - [ ] Refactorización DRY (Don't Repeat Yourself): Extracción de lógica repetida de mapeo de catálogos hacia un custom hook (`useUnifiedCatalog`) y creación de componentes atómicos para estados de carga/vacíos.
 - [ ] UI/UX Final y Mobile: Pulido de filtros activos (Multi-select) y Drawer/Modal de filtros para la versión móvil.
 - [ ] Persistencia & Checkout: Sincronización con localStorage, diseño del flujo de pago (Checkout) y validación final de órdenes.

@@ -16,11 +16,11 @@ const NavLink: React.FC<NavLinkProps> = ({ item, onClick, className = "", showSu
   const hasSubmenu = showSubmenu && item.submenu && item.submenu.length > 0;
   
   return (
-    <div className="relative group flex items-center">
+    <div className="relative group flex items-center w-full">
       <Link
         to={item.url}
         onClick={(e) => onClick(e, item.url)}
-        className={`text-[11px] font-black uppercase tracking-[3px] flex items-center gap-2 transition-colors py-4 ${
+        className={`uppercase font-black transition-colors flex items-center gap-2 ${
           item.active ? 'text-black' : 'text-gray-400 hover:text-black'
         } ${className}`}
       >
@@ -28,13 +28,13 @@ const NavLink: React.FC<NavLinkProps> = ({ item, onClick, className = "", showSu
         
         {/* Lógica del icono de fuego inyectada en el átomo */}
         {item.icon === 'fire' && (
-          <i className="fa-solid fa-fire text-orange-500 animate-pulse"></i>
+          <i className="fa-solid fa-fire text-orange-500 animate-pulse text-[0.8em] pr-0"></i>
         )}
       </Link>
 
       {/* Renderizado condicional del Submenú */}
       {hasSubmenu && (
-        <div className="bg-white/30 absolute top-full left-0 hidden group-hover:block animate-in fade-in slide-in-from-top-1 duration-200 z-50">
+        <div className="bg-white/30 absolute top-full left-0 hidden md:group-hover:block animate-in fade-in slide-in-from-top-1 duration-200 z-50">
           {/* mt-[-10px] para que no haya "hueco" y no se cierre al mover el mouse */}
           <div className="bg-white/90 backdrop-blur-md shadow-xl border-gray-100 border-0 p-6 min-w-55">
             {item.submenu?.map((sub, idx) => (
