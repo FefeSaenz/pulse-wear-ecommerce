@@ -10,6 +10,7 @@ import { Product } from '@/src/types/product.types'; // Importamos tu tipo real
 // UI Components
 import Price from '@/src/components/ui/Price';
 import ProductCarousel from '@/src/components/ui/ProductCarousel';
+import Breadcrumbs from '@/src/components/ui/Breadcrumbs';
 
 interface ProductDetailContext {
   setSelectedQuickView: (product: Product) => void;
@@ -147,13 +148,12 @@ const ProductDetail: React.FC = () => {
     <div className="max-w-360 mx-auto px-6 py-6 md:py-10 animate-in fade-in duration-500">
       
       {/* BREADCRUMBS */}
-      <nav className="flex flex-wrap items-center text-[10px] font-black uppercase tracking-[2px] text-gray-400 mb-6 md:mb-10 gap-y-2">
-        <Link to="/" className="hover:text-black transition-colors shrink-0">Inicio</Link>
-        <span className="mx-2 md:mx-3 shrink-0">/</span>
-        <Link to={`/category/${product.category.toLowerCase()}`} className="hover:text-black transition-colors shrink-0">{product.category}</Link>
-        <span className="mx-2 md:mx-3 shrink-0">/</span>
-        <span className="text-black truncate">{product.name}</span>
-      </nav>
+      <Breadcrumbs 
+        items={[
+          { label: product.category, href: `/category/${product.category.toLowerCase()}` },
+          { label: product.name } // Sin href porque es el actual
+        ]} 
+      />
 
       <div className="flex flex-col md:flex-row gap-12 lg:gap-20 ">
         
