@@ -52,7 +52,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
 
   return (
     // Agregamos un contenedor principal que puede ocupar todo el ancho
-    <section className="w-full">
+    <section className="w-full flex flex-col gap-6">
       <style>{`
         .no-scroll-view::-webkit-scrollbar { display: none; }
         .no-scroll-view { -ms-overflow-style: none; scrollbar-width: none; }
@@ -67,7 +67,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
       />
 
       {/* Contenedor de las tarjetas (Full Bleed en Mobile) */}
-      <div className="max-w-360 py-5 mt-4 mx-auto relative group/carousel">
+      <div className="max-w-360 mx-auto relative group/carousel w-full">
         {/* FLECHAS LATERALES (Exclusivas de Desktop, escuchan solo al group/carousel) */}
         <button 
           onClick={() => scroll('left')}

@@ -27,6 +27,7 @@ El proyecto sigue una estructura modular y reactiva para facilitar su mantenimie
 - `UI/ (Atomics)`: Evolución del átomo NavLink para soportar comportamientos polimórficos y creación del componente SectionTitle, un átomo de diseño modular que estandariza la jerarquía visual de los títulos de sección con soporte para líneas Full-Bleed.
 - `Grid System (Pattern)`: Implementación de una Grilla Unificada de 1440px (max-w-360) con paddings constantes (px-6), asegurando una alineación matemática perfecta (plomada visual) entre componentes de diferentes niveles (Header, Grillas, Carruseles, Secciones y Footer).
 - `Full-Bleed Containers (Pattern)`: Implementación arquitectónica donde los elementos visuales (como la línea del SectionTitle o el scroll infinito del ProductCarousel) ocupan el 100% del viewport (w-full), mientras que el contenido interno y el snapping respetan estrictamente la plomada de la grilla global (max-w-360 px-6).
+- `Vertical Rhythm (Pattern)`: Delegación del espaciado entre secciones principales exclusivamente a contenedores padres mediante flexbox y gaps (flex-col gap-16), eliminando la dependencia de márgenes rígidos (mt, mb) en componentes internos. Esto asegura un flujo visual predecible y facilita la escalabilidad de las vistas.
 
 
 ## ✅ Logros y Avances
@@ -84,6 +85,7 @@ El proyecto sigue una estructura modular y reactiva para facilitar su mantenimie
 - [x] **Firma y Limpieza de Deuda:** Inclusión de créditos profesionales ("Developed by Innovación Digital") y limpieza de lógica redundante en el maquetado de LocationsSection.
 - [x] **Micro-navegación:** Creación e integración del componente atómico `Breadcrumbs` para mejorar la orientación del usuario en las jerarquías de productos.
 - [x] **Dominio de Layouts Complejos (Full-Bleed):** Resolución exitosa del patrón "Full-Bleed" para carruseles y líneas separadoras, logrando que rompan el contenedor para ocupar el 100% del viewport sin perder la alineación estricta (plomada visual) de la grilla interna.
+- [x] **Estandarización del Ritmo Vertical:** Refactorización exitosa de las vistas principales (Home y PDP) implementando un sistema de espaciado fluido basado en `flex` y `gap`. Esto erradicó la dependencia de márgenes rígidos (`mt`, `mb`) en componentes aislados, logrando una interfaz mucho más predecible, limpia y fácil de escalar.
 
 ## 🛠️ Próximos Pasos
 - [ ] **Unificación Tipográfica (Catálogo):** Refactorizar la página de /productos para eliminar fuentes itálicas residuales y alinear el H1 al nuevo sistema de diseño extendido.

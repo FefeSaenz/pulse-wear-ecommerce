@@ -146,8 +146,8 @@ const ProductDetail: React.FC = () => {
   // 7. RENDERIZADO PRINCIPAL
   return (
     // Envolvemos todo en un Fragment para poder poner el Carousel AFUERA del contenedor constreñido
-    <>
-      <div className="max-w-360 mx-auto px-6 py-6 md:py-10 animate-in fade-in duration-500">
+    <div className='flex flex-col gap-16 pb-16 animate-in fade-in duration-500'>
+      <div className="max-w-360 mx-auto px-6 pt-6 md:pt-10 w-full">
         
         {/* BREADCRUMBS */}
         <Breadcrumbs 
@@ -375,7 +375,7 @@ const ProductDetail: React.FC = () => {
         products={allProducts.filter(p => p.id !== product.id).slice(0, 8)} 
         onAdd={setSelectedQuickView}
       />
-    </>
+    </div>
   );
 };
 

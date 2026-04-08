@@ -16,12 +16,11 @@ const SectionTitle: React.FC<SectionTitleProps> = ({
 }) => {
 
   const titleSize = variant === 'slim' ? 'text-2xl md:text-3xl' : 'text-3xl md:text-4xl';
-  // CORRECCIÓN: border-b-2 (el 3 no existe en Tailwind por defecto)
   const borderSize = variant === 'slim' ? 'border-b-3' : 'border-b-4 md:border-b-5';
 
   return (
     // El contenedor principal (w-full) maneja la línea de lado a lado
-    <div className={`w-full ${borderSize} border-black mb-8`}>
+    <div className={`w-full ${borderSize} border-black`}>
       {/* El contenedor interno (max-w-360) mantiene el texto alineado con los productos */}
       <div className="max-w-360 mx-auto px-6 flex justify-between items-end pb-1 md:pb-1">
         <h2 className={`${titleSize} font-syne font-bold uppercase tracking-normal leading-none mt-1`}>
