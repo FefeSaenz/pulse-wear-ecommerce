@@ -53,12 +53,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAdd }) => {
           {/* CAPA 3: EL LINK DE CRISTAL (Z-20) */}
           <Link 
             to={productUrl} 
-            className="absolute inset-0 z-20 cursor-pointer"
+            className="absolute inset-0 z-10 cursor-pointer"
             title={`Ver ${product.name}`}
           />
   
           {/* CAPA 4: EL BOTÓN DE VISTA RÁPIDA CENTRADO (Z-30) */}
-          <div className="absolute inset-0 bottom-0 max-md:hidden items-end pb-2 justify-center opacity-0 group-hover:opacity-100 z-30 pointer-events-none transition-opacity duration-300 flex">
+          <div className="absolute inset-0 bottom-0 max-md:hidden items-end pb-2 justify-center opacity-0 group-hover:opacity-100 z-20 pointer-events-none transition-opacity duration-300 flex">
              <button 
               onClick={(e) => {
                 // FRENAMOS la navegación del Link de cristal y abrimos el Modal

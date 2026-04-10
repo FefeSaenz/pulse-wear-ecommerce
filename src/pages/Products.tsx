@@ -115,13 +115,20 @@ const Products: React.FC = () => {
     };
 
     // Título dinámico para el H1
-    const pageTitle = isOffersRoute 
-        ? '🔥 Ofertas' 
-        : (activeCategory === 'Todos' ? 'Catálogo' : activeCategory);
+    const pageTitle = searchTerm
+        ? 'BÚSQUEDA'
+        : isOffersRoute 
+            ? (
+                <span className="flex items-center gap-3">
+                    OFERTAS <i className="fa-solid fa-fire text-orange-500 animate-pulse text-[0.8em]"></i>
+                </span>
+              )
+            : (activeCategory === 'Todos' ? 'CATÁLOGO' : activeCategory);
 
 
     // Lógica Breadcrumbs
     const breadcrumbItems = useMemo(() => {
+        if (searchTerm) return [{ label: 'Catálogo', href: '/productos' }, { label: 'Búsqueda' }];
         if (isOffersRoute) return [{ label: 'Ofertas' }];
         if (activeCategory === 'Todos') return [{ label: 'Catálogo' }];
         
@@ -129,7 +136,7 @@ const Products: React.FC = () => {
             { label: 'Catálogo', href: '/productos' }, // Con link para volver
             { label: activeCategory }                  // Texto plano (donde estoy)
         ];
-    }, [isOffersRoute, activeCategory]);
+    }, [isOffersRoute, activeCategory, searchTerm]);
 
     if (loading) {
         return (
@@ -157,9 +164,9 @@ const Products: React.FC = () => {
             {/* CONTENEDOR PRINCIPAL: Sidebar + Grid */}
             <div className="max-w-360 mx-auto px-6 w-full flex flex-col md:flex-row gap-12 mt-8">
                 {/* SIDEBAR DE FILTROS (IZQUIERDA - Solo PC) */}
-                <aside className="hidden md:block w-64 shrink-0">
+                <aside className="hidden md:block w-64 shrink-0 sticky top-44 self-start max-h-[calc(100vh-14rem)] overflow-y-auto no-scrollbar pb-8 pr-4">
                     <FilterSidebar 
-                        activeFilters={{ sizeFilter, colorFilter }}
+                        activeFilters={{ sizeFilter, colorFilter, searchTerm }}
                         onFilterChange={handleFilterChange}
                         onClearFilters={handleClearFilters}
                     />
@@ -169,9 +176,7 @@ const Products: React.FC = () => {
                 <main className="flex-1">
                     <ProductGrid 
                         products={filteredProducts} 
-                        searchTerm={searchTerm}
                         onQuickView={setSelectedQuickView}
-                        onClearSearch={() => handleFilterChange('search', null)}
                     />
                 </main>
             </div>
@@ -200,7 +205,7 @@ const Products: React.FC = () => {
                         {/* El mismo FilterSidebar que usamos en PC, pero adentro del Drawer */}
                         <div className="p-6 overflow-y-auto flex-1">
                             <FilterSidebar 
-                                activeFilters={{ sizeFilter, colorFilter }}
+                                activeFilters={{ sizeFilter, colorFilter, searchTerm }}
                                 onFilterChange={handleFilterChange}
                                 onClearFilters={handleClearFilters}
                             />

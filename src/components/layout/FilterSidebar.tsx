@@ -2,14 +2,10 @@ import React, { useMemo } from 'react';
 import { useApp } from '@/src/context/AppContext';
 
 interface FilterSidebarProps {
-  activeFilters: { sizeFilter: string | null; colorFilter: string | null; };
+  activeFilters: { sizeFilter: string | null; colorFilter: string | null; searchTerm?: string | null; };
   onFilterChange: (key: string, value: string | null) => void;
   onClearFilters: () => void; // Nueva prop para limpiar todo
 }
-
-const COLOR_MAP: Record<string, string> = {
-  'Negro': '#000000', 'Blanco': '#FFFFFF', 'Gris': '#808080', 'Beige': '#F5F5DC', 'Azul': '#0000FF', 'Rojo': '#FF0000',
-};
 
 // Mapa Maestro de Normalización y Color
 const COLOR_SYSTEM: Record<string, { hex: string, group: string }> = {
@@ -56,7 +52,7 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ activeFilters, onFilterCh
     return found ? found.hex : '#ccc';
   };
 
-  const hasActiveFilters = activeFilters.sizeFilter || activeFilters.colorFilter;
+  const hasActiveFilters = activeFilters.sizeFilter || activeFilters.colorFilter || activeFilters.searchTerm;
 
   return (
     <div className="space-y-10">
@@ -74,6 +70,18 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ activeFilters, onFilterCh
             </button>
           </div>
           <div className="flex flex-wrap gap-2">
+            {/* Chip de Búsqueda */}
+            {activeFilters.searchTerm && (
+              <button 
+                onClick={() => onFilterChange('search', null)}
+                className="flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 hover:border-red-300 hover:text-red-500 text-[10px] font-bold uppercase transition-colors rounded-full group cursor-pointer shadow-sm"
+              >
+                Búsqueda: {activeFilters.searchTerm}
+                <span className="text-gray-400 group-hover:text-red-500">✕</span>
+              </button>
+            )}
+
+            {/* Chip de Talle */}
             {activeFilters.sizeFilter && (
               <button 
                 onClick={() => onFilterChange('talle', null)}
@@ -83,6 +91,8 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ activeFilters, onFilterCh
                 <span className="text-gray-400 group-hover:text-red-500">✕</span>
               </button>
             )}
+
+            {/* Chip de Color */}
             {activeFilters.colorFilter && (
               <button 
                 onClick={() => onFilterChange('color', null)}

@@ -89,8 +89,14 @@ El proyecto sigue una estructura modular y reactiva para facilitar su mantenimie
 - [x] **Unificación Tipográfica y Layout (Catálogo):** Refactorización de la página de productos eliminando fuentes itálicas residuales, alineando el H1 al nuevo sistema de diseño e integrando el patrón de Ritmo Vertical.
 - [x] **UX/UI Standard Premium (FilterBar):** Rediseño arquitectónico de la barra de filtros, eliminando navegación redundante y transformándola en un encabezado dinámico y *sticky* que retiene el contexto del usuario durante el scroll.
 - [x] **Desacoplamiento de Componentes (Breadcrumbs):** Refactorización del componente Breadcrumbs eliminando márgenes rígidos integrados para convertirlo en un elemento 100% "tonto" (dumb component) y reutilizable, delegando el control espacial absoluto a los contenedores padres.
+- [x] **Arquitectura Sticky Avanzada:** Resolución matemática precisa del comportamiento *sticky* en el panel de filtros (`top` y `max-h` calculado), garantizando un anclaje perfecto y habilitando scroll interno sin quiebres visuales.
+- [x] **Control de Capas (Z-Index):** Auditoría y corrección de la profundidad de componentes (`ProductCard` vs `FilterBar`), asegurando que las tarjetas interactivas respeten la jerarquía visual y se deslicen correctamente bajo la barra de navegación.
+- [x] **Estado Vacío y Gramática UI:** Refinamiento de la grilla de productos (`ProductGrid`) con pluralidad inteligente ("1 Producto" vs "X Productos") y eliminación de botones redundantes, dándole protagonismo a un "Empty State" inmaculado.
+- [x] **Micro-interacciones Dinámicas:** Extensión de la interfaz de componentes (`ReactNode` en `FilterBar`) para soportar inyección de íconos animados dependientes del contexto de ruteo (ej: animación *pulse* en vistas de ofertas).
+- [x] **Filtros Activos Resilientes:** Integración del término de búsqueda como un chip interactivo en el Sidebar, unificando el flujo de limpieza y aplicando diseño defensivo (`truncate`, `shrink-0`) para prevenir rupturas del layout ante textos extremadamente largos.
 
 ## 🛠️ Próximos Pasos
+- [ ] **Lógica de Filtros Extendidos:** Conectar la maquetación visual de los nuevos parámetros ("Género" y "Rango de Precio") con el custom hook `useProductFilters` y sincronizarlos con la URL.
 - [ ] **Refactorización DRY (Don't Repeat Yourself):** Extracción de lógica repetida de mapeo de catálogos hacia un custom hook (`useUnifiedCatalog`) y creación de componentes atómicos para estados de carga/vacíos.
 - [ ] **Persistencia del Carrito:** Integrar `localStorage` para que el usuario no pierda los productos seleccionados si recarga o cierra la pestaña accidentalmente.
 - [ ] **Autenticación (Autenticación Google/JWT):** Implementar el login de usuarios para reemplazar el `GUEST_ID` temporal y vincular las órdenes directamente con las cuentas reales de los clientes.
