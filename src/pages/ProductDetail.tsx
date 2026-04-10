@@ -151,6 +151,7 @@ const ProductDetail: React.FC = () => {
         
         {/* BREADCRUMBS */}
         <Breadcrumbs 
+          className='mb-6 md:mb-10'
           items={[
             { label: product.category, href: `/category/${product.category.toLowerCase()}` },
             { label: product.name } // Sin href porque es el actual

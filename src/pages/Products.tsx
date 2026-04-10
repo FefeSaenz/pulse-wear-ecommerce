@@ -11,6 +11,7 @@ import { mapApiProductToLocal } from '@/src/utils/mappers';
 import ProductGrid from '@/src/components/layout/ProductGrid';
 import FilterSidebar from '@/src/components/layout/FilterSidebar';
 import FilterBar from '@/src/components/ui/FilterBar';
+import Breadcrumbs from '@/src/components/ui/Breadcrumbs';
 
 interface ProductsContext {
     setSelectedQuickView: (product: Product) => void;
@@ -27,7 +28,6 @@ const Products: React.FC = () => {
     const isOffersRoute = location.pathname === '/offers';
     const navigate = useNavigate();
 
-    // NUEVO: Estado para controlar el Drawer de filtros en Mobile
     const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
 
     // 1. COMBINACIÓN Y NORMALIZACIÓN DE DATA
@@ -97,17 +97,9 @@ const Products: React.FC = () => {
         setActiveColor(colorFilter);
     }, [initialCategory, sizeFilter, colorFilter, setActiveCategory, setActiveSize, setActiveColor, isOffersRoute]);
     
-    // 5. MANEJADOR DE NAVEGACIÓN Y FILTROS
+    // 5. MANEJADOR DE FILTROS
     // Este manejador controla la barra superior y cambia de PÁGINA
-    const handleCategoryNavigation = (cat: string) => {
-        if (cat === 'Todos') {
-            navigate('/productos');
-        } else {
-            navigate(`/category/${cat.toLowerCase()}`);
-        }
-    };
-
-    // Este manejador controla solo Talle y Color en la URL
+    
     const handleFilterChange = (key: string, value: string | null) => {
         const newParams = new URLSearchParams(searchParams);
         if (value) newParams.set(key, value);
@@ -124,9 +116,21 @@ const Products: React.FC = () => {
 
     // Título dinámico para el H1
     const pageTitle = isOffersRoute 
-        ? '🔥 Ofertas Exclusivas' 
-        : (activeCategory === 'Todos' ? 'Catálogo Completo' : activeCategory);
-    
+        ? '🔥 Ofertas' 
+        : (activeCategory === 'Todos' ? 'Catálogo' : activeCategory);
+
+
+    // Lógica Breadcrumbs
+    const breadcrumbItems = useMemo(() => {
+        if (isOffersRoute) return [{ label: 'Ofertas' }];
+        if (activeCategory === 'Todos') return [{ label: 'Catálogo' }];
+        
+        return [
+            { label: 'Catálogo', href: '/productos' }, // Con link para volver
+            { label: activeCategory }                  // Texto plano (donde estoy)
+        ];
+    }, [isOffersRoute, activeCategory]);
+
     if (loading) {
         return (
         <div className="min-h-screen flex items-center justify-center">
@@ -135,20 +139,24 @@ const Products: React.FC = () => {
         );
     }
     return (
-        <div className="max-w-360 mx-auto px-6 pb-5 animate-in fade-in duration-500">
-            {/* BARRA SUPERIOR (Usa la navegación real) */}
+        <div className="flex flex-col animate-in fade-in duration-500 pb-16">
+
+            {/* 1. BREADCRUMBS SUTILES (Arriba de la barra) */}
+            <div className="max-w-360 mx-auto px-6 w-full pt-6 pb-4">
+                <Breadcrumbs items={breadcrumbItems} />
+            </div>
+
+            {/* FILTER BAR (Sticky, contiene el H1 */}
             <FilterBar 
-                categories={categories}
-                activeCategory={activeCategory}
-                onCategoryChange={handleCategoryNavigation}
+                title={pageTitle}
                 sortBy={sortBy}
                 onSortChange={(val) => setSortBy(val as any)}
-                onOpenMobileFilters={() => setIsMobileFiltersOpen(true)} // <-- Conectamos el botón
+                onOpenMobileFilters={() => setIsMobileFiltersOpen(true)}
             />
 
-            <div className="flex flex-col md:flex-row gap-12 mt-7">
+            {/* CONTENEDOR PRINCIPAL: Sidebar + Grid */}
+            <div className="max-w-360 mx-auto px-6 w-full flex flex-col md:flex-row gap-12 mt-8">
                 {/* SIDEBAR DE FILTROS (IZQUIERDA - Solo PC) */}
-                {/* NUEVO: Le pusimos hidden md:block para que no moleste en el celu */}
                 <aside className="hidden md:block w-64 shrink-0">
                     <FilterSidebar 
                         activeFilters={{ sizeFilter, colorFilter }}
@@ -159,12 +167,6 @@ const Products: React.FC = () => {
                 
                 {/* GRILLA DE PRODUCTOS (DERECHA) */}
                 <main className="flex-1">
-                    <div className="mb-8">
-                        <h1 className="text-4xl font-black tracking-tighter uppercase italic italic-pulso">
-                            {pageTitle}
-                        </h1>
-                    </div>
-
                     <ProductGrid 
                         products={filteredProducts} 
                         searchTerm={searchTerm}

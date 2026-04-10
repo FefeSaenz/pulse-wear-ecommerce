@@ -13,7 +13,7 @@ interface BreadcrumbsProps {
 
 const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items, className = "" }) => {
   return (
-    <nav className={`flex flex-wrap items-center text-[10px] font-black uppercase tracking-[2px] text-gray-400 mb-6 md:mb-10 gap-y-2 ${className}`}>
+    <nav className={`flex flex-wrap items-center text-[10px] font-black uppercase tracking-[2px] text-gray-400 gap-y-2 ${className}`}>
       {/* Paso inicial estático: Inicio */}
       <Link to="/" className="hover:text-black transition-colors shrink-0">
         Inicio

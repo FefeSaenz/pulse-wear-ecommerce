@@ -86,9 +86,11 @@ El proyecto sigue una estructura modular y reactiva para facilitar su mantenimie
 - [x] **Micro-navegación:** Creación e integración del componente atómico `Breadcrumbs` para mejorar la orientación del usuario en las jerarquías de productos.
 - [x] **Dominio de Layouts Complejos (Full-Bleed):** Resolución exitosa del patrón "Full-Bleed" para carruseles y líneas separadoras, logrando que rompan el contenedor para ocupar el 100% del viewport sin perder la alineación estricta (plomada visual) de la grilla interna.
 - [x] **Estandarización del Ritmo Vertical:** Refactorización exitosa de las vistas principales (Home y PDP) implementando un sistema de espaciado fluido basado en `flex` y `gap`. Esto erradicó la dependencia de márgenes rígidos (`mt`, `mb`) en componentes aislados, logrando una interfaz mucho más predecible, limpia y fácil de escalar.
+- [x] **Unificación Tipográfica y Layout (Catálogo):** Refactorización de la página de productos eliminando fuentes itálicas residuales, alineando el H1 al nuevo sistema de diseño e integrando el patrón de Ritmo Vertical.
+- [x] **UX/UI Standard Premium (FilterBar):** Rediseño arquitectónico de la barra de filtros, eliminando navegación redundante y transformándola en un encabezado dinámico y *sticky* que retiene el contexto del usuario durante el scroll.
+- [x] **Desacoplamiento de Componentes (Breadcrumbs):** Refactorización del componente Breadcrumbs eliminando márgenes rígidos integrados para convertirlo en un elemento 100% "tonto" (dumb component) y reutilizable, delegando el control espacial absoluto a los contenedores padres.
 
 ## 🛠️ Próximos Pasos
-- [ ] **Unificación Tipográfica (Catálogo):** Refactorizar la página de /productos para eliminar fuentes itálicas residuales y alinear el H1 al nuevo sistema de diseño extendido.
 - [ ] **Refactorización DRY (Don't Repeat Yourself):** Extracción de lógica repetida de mapeo de catálogos hacia un custom hook (`useUnifiedCatalog`) y creación de componentes atómicos para estados de carga/vacíos.
 - [ ] **Persistencia del Carrito:** Integrar `localStorage` para que el usuario no pierda los productos seleccionados si recarga o cierra la pestaña accidentalmente.
 - [ ] **Autenticación (Autenticación Google/JWT):** Implementar el login de usuarios para reemplazar el `GUEST_ID` temporal y vincular las órdenes directamente con las cuentas reales de los clientes.
