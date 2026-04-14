@@ -1,10 +1,16 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { useApp } from '@/src/context/AppContext';
 
 interface FilterSidebarProps {
-  activeFilters: { sizeFilter: string | null; colorFilter: string | null; searchTerm?: string | null; };
+  activeFilters: { 
+    sizeFilter: string | null; 
+    colorFilter: string | null; 
+    priceFilter: string | null;
+    searchTerm?: string | null; 
+  };
   onFilterChange: (key: string, value: string | null) => void;
-  onClearFilters: () => void; // Nueva prop para limpiar todo
+  onClearFilters: () => void;
+  onCloseMobile?: () => void; // NUEVO prop para cerrar el sidebar en móvil
 }
 
 // Mapa Maestro de Normalización y Color
@@ -22,9 +28,51 @@ const COLOR_SYSTEM: Record<string, { hex: string, group: string }> = {
 
 const SIZE_ORDER = ['XS', 'S', 'M', 'L', 'XL', 'XXL', '2XL'];
 
-const FilterSidebar: React.FC<FilterSidebarProps> = ({ activeFilters, onFilterChange, onClearFilters }) => {
+// Función para formatear el input con puntitos de miles
+const formatPriceInput = (value: string) => {
+  const raw = value.replace(/\D/g, ''); // Borra todo lo que no sea número
+  if (!raw) return '';
+  return raw.replace(/\B(?=(\d{3})+(?!\d))/g, "."); // Agrega el punto cada 3 dígitos
+};
+
+const FilterSidebar: React.FC<FilterSidebarProps> = ({ activeFilters, onFilterChange, onClearFilters, onCloseMobile }) => {
   const { allProducts } = useApp();
   
+  // --- ESTADOS LOCALES PARA LOS INPUTS DE PRECIO ---
+  const [minPrice, setMinPrice] = useState('');
+  const [maxPrice, setMaxPrice] = useState('');
+
+  // Sincronizar los inputs si el filtro se limpia desde la URL
+  useEffect(() => {
+    if (activeFilters.priceFilter) {
+      const [min, max] = activeFilters.priceFilter.split('-');
+      // Formateamos los números que vienen crudos de la URL para que tengan puntitos
+      setMinPrice(min ? formatPriceInput(min) : '');
+      setMaxPrice(max ? formatPriceInput(max) : '');
+    } else {
+      setMinPrice('');
+      setMaxPrice('');
+    }
+  }, [activeFilters.priceFilter]);
+
+  // Manejador del botón "Aplicar"
+  const handleApplyPrice = () => {
+    // Le sacamos los puntitos antes de mandarlo a la URL
+    const cleanMin = minPrice.replace(/\./g, '');
+    const cleanMax = maxPrice.replace(/\./g, '');
+
+    if (!cleanMin && !cleanMax) {
+      onFilterChange('precio', null);
+    } else {
+      onFilterChange('precio', `${cleanMin}-${cleanMax}`);
+    }
+
+    // Si estamos en mobile, cerramos el drawer al aplicar
+    if (onCloseMobile) {
+      onCloseMobile();
+    }
+  };
+
   // Talles únicos ordenados
   const sizes = useMemo(() => {
     const allSizes = allProducts.flatMap(p => 
@@ -52,7 +100,16 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ activeFilters, onFilterCh
     return found ? found.hex : '#ccc';
   };
 
-  const hasActiveFilters = activeFilters.sizeFilter || activeFilters.colorFilter || activeFilters.searchTerm;
+  const hasActiveFilters = activeFilters.sizeFilter || activeFilters.colorFilter || activeFilters.priceFilter || activeFilters.searchTerm;
+
+  // Lógica para renderizar el texto del chip de precio
+  const getPriceLabel = (filterStr: string) => {
+    const [min, max] = filterStr.split('-');
+    if (min && max) return `$${min} - $${max}`;
+    if (min) return `Más de $${min}`;
+    if (max) return `Hasta $${max}`;
+    return '';
+  };
 
   return (
     <div className="space-y-10">
@@ -102,9 +159,67 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ activeFilters, onFilterCh
                 <span className="text-gray-400 group-hover:text-red-500">✕</span>
               </button>
             )}
+
+            {/* Chip de Precio */}
+            {activeFilters.priceFilter && (
+              <button 
+                onClick={() => onFilterChange('precio', null)}
+                className="flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 hover:border-red-300 hover:text-red-500 text-[10px] font-bold uppercase transition-colors rounded-full group cursor-pointer shadow-sm"
+              >
+                Precio: {getPriceLabel(activeFilters.priceFilter)}
+                <span className="text-gray-400 group-hover:text-red-500">✕</span>
+              </button>
+            )}
           </div>
         </div>
       )}
+
+      {/* SECCIÓN PRECIO (NUEVOS TEXTBOXES UX) */}
+      <div>
+        <h3 className="text-[10px] font-black uppercase tracking-[4px] mb-6 text-gray-400">Precio</h3>
+        
+        <div className="flex items-center gap-3 mb-5">
+          {/* Input Mínimo */}
+          <div className="relative flex-1">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none">
+              $
+            </span>
+            <input
+              type="text"
+              inputMode="numeric"
+              placeholder="Mínimo"
+              value={minPrice}
+              onChange={(e) => setMinPrice(formatPriceInput(e.target.value))}
+              className="w-full border border-gray-200 pl-6 pr-3 py-2.5 text-[16px] md:text-xs text-right focus:outline-none focus:border-black transition-colors rounded-sm placeholder:text-gray-300"
+            />
+          </div>
+
+          {/* Separador */}
+          <span className="text-gray-400 text-[10px] font-bold uppercase">a</span>
+
+          {/* Input Máximo */}
+          <div className="relative flex-1">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none">
+              $
+            </span>
+            <input
+              type="text"
+              inputMode="numeric"
+              placeholder="Máximo"
+              value={maxPrice}
+              onChange={(e) => setMaxPrice(formatPriceInput(e.target.value))}
+              className="w-full border border-gray-200  pl-6 pr-3 py-2.5  text-[16px] md:text-xs text-right focus:outline-none focus:border-black transition-colors rounded-sm placeholder:text-gray-300"
+            />
+          </div>
+        </div>
+
+        <button
+          onClick={handleApplyPrice}
+          className="w-full bg-black text-white py-3 px-4 text-[11px] font-black uppercase tracking-[4px] hover:bg-gray-900 active:scale-[0.98] transition-all rounded-sm cursor-pointer"
+        >
+          Aplicar
+        </button>
+      </div>
 
       {/* SECCIÓN TALLE */}
       <div>

@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { Product } from '../types/product.types';
+import { Product } from '@/src/types/product.types';
 
 interface UseProductFiltersProps {
   products: Product[];
@@ -21,6 +21,7 @@ export const useProductFilters = ({
   const [activeCategory, setActiveCategory] = useState('Todos');
   const [activeSize, setActiveSize] = useState<string | null>(null);
   const [activeColor, setActiveColor] = useState<string | null>(null);
+  const [activePrice, setActivePrice] = useState<string | null>(null);
   const [sortBy, setSortBy] = useState<'default' | 'price-low' | 'price-high'>('default');
   //const categories = ['Todos', 'Remeras', 'Pantalones', 'Buzos'];
 
@@ -59,18 +60,32 @@ export const useProductFilters = ({
       );
     }
 
-    // 5. Ordenamiento (Sort)
+    // 5. Filtro por Precio (Rango) - NUEVO
+    if (activePrice) {
+      const [minStr, maxStr] = activePrice.split('-');
+      const min = minStr ? parseInt(minStr, 10) : 0;
+      const max = maxStr ? parseInt(maxStr, 10) : Infinity;
+
+      result = result.filter(p => {
+        // Si el producto está en oferta, filtramos por el precio real que paga el usuario
+        const finalPrice = p.price; 
+        return finalPrice >= min && finalPrice <= max;
+      });
+    }
+
+    // 6. Ordenamiento (Sort)
     if (sortBy === 'price-low') result.sort((a, b) => a.price - b.price);
     if (sortBy === 'price-high') result.sort((a, b) => b.price - a.price);
 
     return result;
-  }, [products, activeCategory, activeSize, activeColor, sortBy, searchTerm]);
+  }, [products, activeCategory, activeSize, activeColor, activePrice, sortBy, searchTerm]);
 
   return {
     filteredProducts,
     activeCategory, setActiveCategory,
     activeSize, setActiveSize,
     activeColor, setActiveColor,
+    activePrice, setActivePrice,
     sortBy, setSortBy,
     categories
   };

@@ -54,6 +54,7 @@ const Products: React.FC = () => {
 
     const sizeFilter = searchParams.get('talle');
     const colorFilter = searchParams.get('color');
+    const priceFilter = searchParams.get('precio');
     const searchTerm = searchParams.get('search') || '';
 
     // 3. USO DEL HOOK DE FILTRADO
@@ -65,7 +66,8 @@ const Products: React.FC = () => {
         setActiveCategory,
         activeCategory,
         setActiveSize,
-        setActiveColor
+        setActiveColor,
+        setActivePrice
     } = useProductFilters({ 
         products: combinedProducts, 
         searchTerm 
@@ -78,7 +80,8 @@ const Products: React.FC = () => {
         setActiveCategory(isOffersRoute ? 'Todos' : initialCategory);
         setActiveSize(sizeFilter);
         setActiveColor(colorFilter);
-    }, [initialCategory, sizeFilter, colorFilter, setActiveCategory, setActiveSize, setActiveColor, isOffersRoute]);
+        setActivePrice(priceFilter);
+    }, [initialCategory, sizeFilter, colorFilter, priceFilter, setActiveCategory, setActiveSize, setActiveColor, setActivePrice, isOffersRoute]);
     
     // 5. MANEJADOR DE FILTROS
     // Este manejador controla la barra superior y cambia de PÁGINA
@@ -149,7 +152,7 @@ const Products: React.FC = () => {
                 {/* SIDEBAR DE FILTROS (IZQUIERDA - Solo PC) */}
                 <aside className="hidden md:block w-64 shrink-0 sticky top-44 self-start max-h-[calc(100vh-14rem)] overflow-y-auto no-scrollbar pb-8 pr-4">
                     <FilterSidebar 
-                        activeFilters={{ sizeFilter, colorFilter, searchTerm }}
+                        activeFilters={{ sizeFilter, colorFilter, priceFilter, searchTerm }}
                         onFilterChange={handleFilterChange}
                         onClearFilters={handleClearFilters}
                     />
@@ -188,9 +191,10 @@ const Products: React.FC = () => {
                         {/* El mismo FilterSidebar que usamos en PC, pero adentro del Drawer */}
                         <div className="p-6 overflow-y-auto flex-1">
                             <FilterSidebar 
-                                activeFilters={{ sizeFilter, colorFilter, searchTerm }}
+                                activeFilters={{ sizeFilter, colorFilter, priceFilter, searchTerm }}
                                 onFilterChange={handleFilterChange}
                                 onClearFilters={handleClearFilters}
+                                onCloseMobile={() => setIsMobileFiltersOpen(false)}
                             />
                         </div>
 
