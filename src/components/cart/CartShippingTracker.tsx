@@ -1,6 +1,6 @@
 import React from 'react';
-import { FREE_SHIPPING_THRESHOLD } from '../../constants/products';
-import Price from '../ui/Price';
+import { FREE_SHIPPING_THRESHOLD } from '@/src/constants/products';
+import Price from '@/src/components/ui/Price';
 
 interface Props {
   subtotal: number;

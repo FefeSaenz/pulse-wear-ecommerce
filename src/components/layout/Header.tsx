@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import NavLink from '@/src/components/ui/NavLink';
 import { useApp } from '@/src/context/AppContext';
-import logoPulso from '@/public/assets/Logotipo principal PULSO.png';
-import MobileMenu from '@/src/components/layout/MobileMenu';
+import logoPulso from '@/src/assets/Logotipo principal PULSO.png';
+import MobileMenu from './MobileMenu';
 
 interface HeaderProps {
   onOpenCart: () => void;

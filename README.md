@@ -28,7 +28,10 @@ El proyecto sigue una estructura modular y reactiva para facilitar su mantenimie
 - `Grid System (Pattern)`: Implementación de una Grilla Unificada de 1440px (max-w-360) con paddings constantes (px-6), asegurando una alineación matemática perfecta (plomada visual) entre componentes de diferentes niveles (Header, Grillas, Carruseles, Secciones y Footer).
 - `Full-Bleed Containers (Pattern)`: Implementación arquitectónica donde los elementos visuales (como la línea del SectionTitle o el scroll infinito del ProductCarousel) ocupan el 100% del viewport (w-full), mientras que el contenido interno y el snapping respetan estrictamente la plomada de la grilla global (max-w-360 px-6).
 - `Vertical Rhythm (Pattern)`: Delegación del espaciado entre secciones principales exclusivamente a contenedores padres mediante flexbox y gaps (flex-col gap-16), eliminando la dependencia de márgenes rígidos (mt, mb) en componentes internos. Esto asegura un flujo visual predecible y facilita la escalabilidad de las vistas.
-
+- `Smart/Dumb Components (Pattern)`: Delegación de toda la lógica pesada de procesamiento de datos a Custom Hooks (useQuickView, useUnifiedProducts), manteniendo las vistas principales (Home, Products) como componentes puramente presentacionales.
+- `Client-Side Hydration (Pattern)`: Interceptación de datos "ligeros" (DTOs) provenientes de la API para enriquecerlos dinámicamente con la data completa del catálogo en memoria, garantizando la disponibilidad de variantes (talles/colores) en los Modales sin sacrificar la velocidad de carga.
+- `Data Unification (Pattern)`: Centralización (Single Source of Truth) de la fusión del catálogo base con los productos destacados, inyectando etiquetas y creando un escudo defensivo (fallback) contra productos no listados por el backend.
+- `Path Aliasing (Pattern)`: Configuración estricta de alias absolutos (@/src/...) para dependencias globales y rutas relativas (./) para módulos locales, garantizando un árbol de importaciones escalable y eliminando el infierno de rutas relativas.
 
 ## ✅ Logros y Avances
 - [x] **Estado Global:** Migración exitosa a Context API para desacoplar la lógica del carrito de la UI.
@@ -94,6 +97,11 @@ El proyecto sigue una estructura modular y reactiva para facilitar su mantenimie
 - [x] **Estado Vacío y Gramática UI:** Refinamiento de la grilla de productos (`ProductGrid`) con pluralidad inteligente ("1 Producto" vs "X Productos") y eliminación de botones redundantes, dándole protagonismo a un "Empty State" inmaculado.
 - [x] **Micro-interacciones Dinámicas:** Extensión de la interfaz de componentes (`ReactNode` en `FilterBar`) para soportar inyección de íconos animados dependientes del contexto de ruteo (ej: animación *pulse* en vistas de ofertas).
 - [x] **Filtros Activos Resilientes:** Integración del término de búsqueda como un chip interactivo en el Sidebar, unificando el flujo de limpieza y aplicando diseño defensivo (`truncate`, `shrink-0`) para prevenir rupturas del layout ante textos extremadamente largos.
+- [x] **Optimización de Assets:** Migración completa de la carpeta `public/assets` a `src/assets` para permitir que Vite procese, minimice y aplique caché de hashes a las imágenes estáticas en el build de producción.
+- [x] **Refactorización de Rutas:** Implementación estricta de alias (`@/src`) para dependencias globales y rutas relativas (`./`) para componentes locales, mejorando la legibilidad del código.
+- [x] **Implementación de `useQuickView`:** Creación de un hook centralizado que resuelve el problema de "falta de variantes" en los productos de la Home, buscando dinámicamente el producto completo en el catálogo general antes de abrir el Modal de Vista Rápida.
+- [x] **Implementación de `useUnifiedProducts`:** Extracción de la lógica de unificación de productos a un hook puro, reduciendo masivamente el código en `Products.tsx` y `Home.tsx` y creando un escudo defensivo contra faltantes en la respuesta de la API.
+- [x] **Blindaje de TypeScript:** Resolución de errores de tipado estricto (manejo de nullables en interfaces de contexto `Product | null` y actualización de contratos de datos financieros `order.summary.total`).
 
 ## 🛠️ Próximos Pasos
 - [ ] **Lógica de Filtros Extendidos:** Conectar la maquetación visual de los nuevos parámetros ("Género" y "Rango de Precio") con el custom hook `useProductFilters` y sincronizarlos con la URL.

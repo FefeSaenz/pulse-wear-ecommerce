@@ -1,8 +1,8 @@
 import React from 'react';
-import NavLink from '../ui/NavLink';
-import { useApp } from '../../context/AppContext';
-import WhiteLogoPulso from '@/public/assets/Positivo LOGO TIPO PULSO.png'
-import SloganPulso from '@/public/assets/Slogan.png'
+import NavLink from '@/src/components/ui/NavLink';
+import { useApp } from '@/src/context/AppContext';
+import WhiteLogoPulso from '@/src/assets/Positivo LOGO TIPO PULSO.png'
+import SloganPulso from '@/src/assets/Slogan.png'
 
 /**
  * FOOTER DATA

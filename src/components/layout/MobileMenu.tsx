@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom'; 
 import { useApp } from '@/src/context/AppContext';
 import NavLink from '@/src/components/ui/NavLink';
-import logoPulso from '@/public/assets/Logotipo principal PULSO.png';
+import logoPulso from '@/src/assets/Logotipo principal PULSO.png';
 
 interface MobileMenuProps {
   isOpen: boolean;

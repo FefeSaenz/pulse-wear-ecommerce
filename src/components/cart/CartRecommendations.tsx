@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
-import { useApp } from '../../context/AppContext';
-import { mapApiProductToLocal } from '../../utils/mappers';
-import { Product } from '../../types/product.types';
-import Price from '../ui/Price';
+import { useApp } from '@/src/context/AppContext';
+import { mapApiProductToLocal } from '@/src/utils/mappers';
+import { Product } from '@/src/types/product.types';
+import Price from '@/src/components/ui/Price';
 
 // --- COMPONENTE DE PRESENTACIÓN (PURO) ---
 interface RecommendationListProps {

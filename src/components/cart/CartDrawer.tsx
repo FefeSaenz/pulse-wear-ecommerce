@@ -3,8 +3,8 @@ import CartItem from './CartItem';
 import CartShippingTracker from './CartShippingTracker';
 import CartRecommendations from './CartRecommendations';
 import CartSummary from './CartSummary';
-import EmptyState from '../ui/EmptyState';
-import { CartItem as CartItemType, Product } from '../../types/product.types';
+import EmptyState from '@/src/components/ui/EmptyState';
+import { CartItem as CartItemType, Product } from '@/src/types/product.types';
 
 interface CartDrawerProps {
   isOpen: boolean;

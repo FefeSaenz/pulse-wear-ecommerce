@@ -1,11 +1,12 @@
-import React, { useMemo, useEffect, useState } from 'react'; // <-- Agregamos useState
+import React, { useMemo, useEffect, useState } from 'react';
 import { useSearchParams, useOutletContext, useParams, useNavigate, useLocation } from 'react-router-dom';
 
 // Context & Hooks
 import { useApp } from '@/src/context/AppContext';
 import { useProductFilters } from '@/src/hooks/useProductFilters';
 import { Product } from '@/src/types/product.types';
-import { mapApiProductToLocal } from '@/src/utils/mappers';
+import { useQuickView } from '@/src/hooks/useQuickView';
+import { useUnifiedProducts } from '@/src/hooks/useUnifiedProducts'; // NUEVO hook para productos unificados
 
 // UI Components
 import ProductGrid from '@/src/components/layout/ProductGrid';
@@ -14,14 +15,18 @@ import FilterBar from '@/src/components/ui/FilterBar';
 import Breadcrumbs from '@/src/components/ui/Breadcrumbs';
 
 interface ProductsContext {
-    setSelectedQuickView: (product: Product) => void;
+    setSelectedQuickView: (product: Product | null) => void;
 }
 
 const Products: React.FC = () => {
-    const { allProducts, frontConfig, loading } = useApp();
+    const { loading } = useApp();
     const [searchParams, setSearchParams] = useSearchParams();
     const { setSelectedQuickView } = useOutletContext<ProductsContext>();
+
+    const { handleQuickView } = useQuickView(setSelectedQuickView);
     
+    const { unifiedProducts } = useUnifiedProducts(); // Obtenemos los productos unificados desde el nuevo hook
+
     const { category: paramCategory } = useParams<{ category: string }>();
 
     const location = useLocation();
@@ -31,36 +36,14 @@ const Products: React.FC = () => {
     const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
 
     // 1. COMBINACIÓN Y NORMALIZACIÓN DE DATA
-    // Juntamos los productos del catálogo con los destacados de la Home
+    // El hook useUnifiedProducts ya se encarga de juntar el catálogo con los destacados.
+    // Acá solo filtramos si estamos en la ruta de ofertas.
     const combinedProducts = useMemo(() => {
-        // Creamos una copia del catálogo
-        const catalog = allProducts.map(p => ({ ...p }));
-
-        // Mapeamos los destacados de la API
-        const featuredRaw = frontConfig?.featured_products?.products || [];
-        const featuredMapped = featuredRaw.map(mapApiProductToLocal);
-
-       featuredMapped.forEach(fProd => {
-            const existingIndex = catalog.findIndex(p => p.id === fProd.id);
-            
-            if (existingIndex === -1) {
-                // Si el producto NO está en el catálogo (Ej: el Jogger prod-012), lo agregamos
-                catalog.push(fProd);
-            } else {
-                // Si YA EXISTE (Ej: prod-001), le inyectamos el cartelito (tag/badge) de destacado
-                // Así tu grilla va a mostrar visualmente que es un producto especial
-                if (fProd.tags) {
-                    catalog[existingIndex].tags = fProd.tags;
-                }
-            }
-        });
-
         if (isOffersRoute) {
-            return catalog.filter(p => p.discount_percentage && p.discount_percentage > 0);
+            return unifiedProducts.filter(p => p.discount_percentage && p.discount_percentage > 0);
         }
-
-        return catalog;
-    }, [allProducts, frontConfig, isOffersRoute]);
+        return unifiedProducts;
+    }, [unifiedProducts, isOffersRoute]);
     
     // 2. PARÁMETROS DE LA URL (Single Source of Truth)
     // NUEVO: Ahora la categoría principal viene del Router (ej: /category/pantalones)
@@ -176,7 +159,7 @@ const Products: React.FC = () => {
                 <main className="flex-1">
                     <ProductGrid 
                         products={filteredProducts} 
-                        onQuickView={setSelectedQuickView}
+                        onQuickView={handleQuickView}
                     />
                 </main>
             </div>

@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { Order } from '../../types/product.types';
+import { Order } from '@/src/types/product.types';
 
 interface UserProfileProps {
   isOpen: boolean;
@@ -77,7 +76,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose, orders }) =>
 
                     <div className="flex justify-between items-center pt-4 border-t border-gray-50">
                       <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">Total</span>
-                      <span className="text-xs font-black">{formatPrice(order.total)}</span>
+                      <span className="text-xs font-black">{formatPrice(order.summary.total)}</span>
                     </div>
                   </div>
                 ))}

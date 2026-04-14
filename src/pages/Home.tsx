@@ -4,37 +4,48 @@ import { useOutletContext, useNavigate } from 'react-router-dom';
 // Contexts & Hooks
 import { useApp } from '@/src/context/AppContext'; // Consumo de la API
 import { Product } from '@/src/types/product.types';
-import { mapApiProductToLocal } from '@/src/utils/mappers';
+import { useQuickView } from '@/src/hooks/useQuickView';
+import { useUnifiedProducts } from '@/src/hooks/useUnifiedProducts';
 
 // UI Components
 import HeroBanner from '@/src/components/ui/HeroBanner';
-import FilterBar from '@/src/components/ui/FilterBar';
 import ProductGrid from '@/src/components/layout/ProductGrid';
 import ProductCarousel from '@/src/components/ui/ProductCarousel';
 import LocationsSection from '@/src/components/layout/LocationsSection';
 
 //Assets
-import banner1 from '@/public/assets/PORTADA PAG WEB PULSO 1.png';
-import banner2 from '@/public/assets/PORTADA PAG WEB PULSO 2.png';
+import banner1 from '@/src/assets/PORTADA PAG WEB PULSO 1.png';
+import banner2 from '@/src/assets/PORTADA PAG WEB PULSO 2.png';
 
 // Definimos la interfaz del contexto que viene del Layout vía Outlet
 interface HomeContext {
-  setSelectedQuickView: (product: Product) => void;
+  setSelectedQuickView: (product: Product | null) => void;
 }
 
 const Home: React.FC = () => {
     const navigate = useNavigate();
     const { allProducts, frontConfig, loading } = useApp(); // Data de la API disponible
-
+    
     const { setSelectedQuickView } = useOutletContext<HomeContext>();
+
+    const { handleQuickView } = useQuickView(setSelectedQuickView);
+    
+    const { unifiedProducts } = useUnifiedProducts(); // Obtenemos los productos unificados desde el nuevo hook
     
     // NORMALIZACIÓN DE PRODUCTOS DESTACADOS
-    // Transformamos los FeaturedProduct de la API al tipo Product de la UI
+    // Le pedimos los destacados directamente a unifiedProducts en lugar de mapearlos a mano
     const featuredMapped = useMemo(() => {
         const raw = frontConfig?.featured_products?.products || [];
-        // Limitamos a 8 productos para no hacer una Home infinita y obligar al usuario a ir al catálogo
-        return raw.map(mapApiProductToLocal).slice(0, 8);
-    }, [frontConfig]);
+        
+        // Mantenemos la lógica de limitar a 8 para no hacer la Home infinita.
+        // En vez de mapearlos, los buscamos en la lista unificada.
+        return raw.map(apiProd => {
+            const found = unifiedProducts.find(p => p.id === apiProd.id);
+            // Si por alguna razón no está en unifiedProducts, el hook ya lo agregó ahí.
+            // Así que este find es seguro.
+            return found;
+        }).filter(Boolean) as Product[]; // Filtramos undefined por si acaso y casteamos
+    }, [frontConfig, unifiedProducts]);
 
     // LÓGICA DE OFERTAS PARA EL CARRUSEL ---
     const offersMapped = useMemo(() => {
@@ -111,7 +122,7 @@ const Home: React.FC = () => {
             <ProductGrid 
                 title='Drops'
                 products={featuredMapped}
-                onQuickView={setSelectedQuickView}
+                onQuickView={handleQuickView}
                 quantityLabel={false}
                 viewAllLink="/productos"
                 viewAllText="Ver Toda La Colección"
@@ -122,7 +133,7 @@ const Home: React.FC = () => {
                 <ProductCarousel 
                     title="Sale!" 
                     products={offersMapped} 
-                    onAdd={setSelectedQuickView}
+                    onAdd={handleQuickView}
                     viewAllLink="/offers"
                     viewAllText="Ver Todas Las Ofertas"
                 />

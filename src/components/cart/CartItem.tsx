@@ -1,6 +1,6 @@
 import React from 'react';
-import { CartItem as CartItemType } from '../../types/product.types';
-import Price from '../ui/Price'; // Usamos nuestro nuevo componente Price
+import { CartItem as CartItemType } from '@/src/types/product.types';
+import Price from '@/src/components/ui/Price'; // Usamos nuestro nuevo componente Price
 
 interface CartItemProps {
   item: CartItemType;

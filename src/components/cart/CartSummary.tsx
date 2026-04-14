@@ -1,5 +1,5 @@
 import React from 'react';
-import Price from '../ui/Price';
+import Price from '@/src/components/ui/Price';
 
 interface Props {
   subtotal: number;

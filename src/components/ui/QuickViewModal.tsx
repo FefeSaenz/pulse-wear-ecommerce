@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Product, ProductVariant } from '../../types/product.types';
+import { CartItem, Product, ProductVariant } from '@/src/types/product.types';
 import Modal from './Modal';
 import Price from './Price';
 
 interface QuickViewModalProps {
   product: Product | null;
   onClose: () => void;
-  onAddToCart: (product: Product, size: string) => void;
+  onAddToCart: (item: CartItem) => void;
 }
 
 const QuickViewModal: React.FC<QuickViewModalProps> = ({ product, onClose, onAddToCart }) => {
@@ -168,7 +168,18 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({ product, onClose, onAdd
           </div>
 
           <button
-            onClick={() => onAddToCart(product, selectedSize)}
+            onClick={() => {
+              if (selectedSize) {
+                const newItem: CartItem = {
+                  ...product,
+                  quantity: 1,
+                  selectedSize: selectedSize,
+                  selectedColor: currentVariant.color.name,
+                  selectedImage: mainImageSrc
+                };
+                onAddToCart(newItem);
+              }
+            }}
             disabled={!selectedSize}
             className={`w-full py-5 text-[12px] font-black uppercase tracking-[4px] transition-colors flex items-center justify-center space-x-3 ${
               selectedSize ? 'bg-black text-white hover:bg-gray-900' : 'bg-gray-200 text-gray-400 cursor-not-allowed'

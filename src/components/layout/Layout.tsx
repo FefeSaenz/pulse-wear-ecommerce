@@ -9,10 +9,10 @@ import { useCart } from '@/src/context/CartContext';
 import Header from './Header';
 import Footer from './Footer';
 import AnnouncementBar from './AnnouncementBar';
-import CartDrawer from '../cart/CartDrawer';
-import QuickViewModal from '../ui/QuickViewModal';
-import CheckoutModal from '../ui/CheckoutModal';
-import UserProfile from '../ui/UserProfile';
+import CartDrawer from '@/src/components/cart/CartDrawer';
+import QuickViewModal from '@/src/components/ui/QuickViewModal';
+import CheckoutModal from '@/src/components/ui/CheckoutModal';
+import UserProfile from '@/src/components/ui/UserProfile';
 
 import { Product } from '@/src/types/product.types';
 import SearchOverlay from './SearchOverlay';
@@ -55,8 +55,6 @@ const Layout: React.FC = () => {
                 onOpenCart={() => setIsCartOpen(true)}
                 onOpenProfile={() => setIsProfileOpen(true)}
                 onOpenSearch={() => setIsSearchOpen(true)}
-                searchTerm={searchTerm}
-                onSearchChange={handleSearch}
                 cartCount={cart.reduce((acc, item) => acc + item.quantity, 0)}
             />
           
@@ -93,8 +91,8 @@ const Layout: React.FC = () => {
             <QuickViewModal 
                 product={selectedQuickView}
                 onClose={() => setSelectedQuickView(null)}
-                onAddToCart={(product, size) => {
-                    addToCart(product, size); 
+                onAddToCart={(item) => {
+                    addToCart(item); // Recibe el CartItem perfecto y lo manda directo al carrito
                     setSelectedQuickView(null); 
                 }}
             />

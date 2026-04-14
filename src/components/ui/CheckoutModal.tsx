@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { CartItem, Order } from '../../types/product.types';
-import Modal from './Modal'; // Asegurate de que la ruta sea correcta
+import { CartItem, Order } from '@/src/types/product.types';
+import Modal from './Modal';
 import Price from './Price';
 
 interface CheckoutModalProps {
