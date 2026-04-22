@@ -109,6 +109,9 @@ El proyecto sigue una estructura modular y reactiva para facilitar su mantenimie
 - [x] **Optimización de Performance y Pixel-Perfect:** Eliminación de web fonts no utilizadas para reducir el peso de carga, y corrección de la herencia CSS en la barra de filtros para lograr simetría exacta en los íconos de interacción.
 - [x] **Branding & App Readiness:** Integración del sistema de favicons moderno (ICO, PNG y Apple Touch Icon), limpiando el `index.html` de dependencias innecesarias y preparando la web para ser instalada en dispositivos iOS.
 - [x] **Optimización Visual (Marquee):** Refactorización matemática de la barra de anuncios (`AnnouncementBar`) aplicando `w-max` para independizar la velocidad de la animación del ancho de la pantalla, logrando un scroll infinito y fluido en todos los dispositivos.
+- [x] **Migración de Contrato API:** Adaptación exitosa al nuevo esquema de datos del backend mediante la actualización del Patrón Adapter (`mappers.ts`), protegiendo a los componentes de la UI de los cambios estructurales (Single Responsibility Principle).
+- [x] **Normalización de Variantes (Color/Talle):** Refactorización del agrupamiento de variables en el Mapper para unificar colores por nombre (evitando duplicados en la UI por variaciones de código HEX) e inyección de estado `disabled` para talles sin stock.
+- [x] **UI Resiliente y Fallbacks Dinámicos:** Implementación de lógicas de seguridad (Defensive Programming) en `Home`, `Header` y Banners para inyectar contenido dinámico elegante cuando la API envía datos incompletos o nulos, garantizando que el diseño nunca se rompa.
 
 ## 🛠️ Próximos Pasos
 - [ ] **Refactorización DRY (Don't Repeat Yourself):** Extracción de lógica repetida de mapeo de catálogos hacia un custom hook (`useUnifiedCatalog`) y creación de componentes atómicos para estados de carga/vacíos.

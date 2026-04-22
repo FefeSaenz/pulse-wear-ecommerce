@@ -105,7 +105,7 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({ product, onClose, onAdd
           <Price amount={product.price} className="text-xl font-bold mb-8 text-black block" />
           
           {/* NUEVO: Selección de Color */}
-          {product.variants.length > 1 && currentVariant.color.name !== 'Único' && (
+          {currentVariant.color.name !== 'ÚNICO' && (
             <div className="mb-6">
               <p className="text-xs font-bold uppercase tracking-widest mb-3 text-black">
                 Color: <span className="text-gray-500 font-normal">{currentVariant.color.name}</span>
@@ -144,12 +144,12 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({ product, onClose, onAdd
                     key={sizeStr}
                     onClick={() => isAvailable && setSelectedSize(sizeStr)}
                     disabled={!isAvailable}
-                    className={`w-12 h-12 flex items-center justify-center text-xs font-bold border transition-all ${
+                    className={`w-12 h-12 border flex items-center justify-center text-[11px] font-bold transition-all rounded-sm ${
                       !isAvailable 
-                        ? 'border-gray-100 text-gray-300 bg-gray-50 cursor-not-allowed opacity-50' // Estilo sin stock
+                        ? 'bg-gray-100 text-gray-400 border-gray-100 cursor-not-allowed opacity-60 line-through' 
                         : selectedSize === sizeStr 
-                          ? 'border-black bg-black text-white' 
-                          : 'border-gray-200 text-gray-400 hover:border-black hover:text-black'
+                          ? 'bg-black text-white border-black ring-1 ring-black ring-offset-1 cursor-pointer' 
+                          : 'bg-white border-gray-200 hover:border-black text-gray-800 cursor-pointer'
                     }`}
                   >
                     {sizeStr}

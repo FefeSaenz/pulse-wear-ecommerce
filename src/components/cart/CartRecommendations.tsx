@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
 import { useApp } from '@/src/context/AppContext';
-import { mapApiProductToLocal } from '@/src/utils/mappers';
 import { Product } from '@/src/types/product.types';
 import Price from '@/src/components/ui/Price';
 
@@ -37,13 +36,14 @@ const RecommendationList: React.FC<RecommendationListProps> = ({ products, onAdd
 // --- COMPONENTE CONTENEDOR (ORQUESTADOR) ---
 // Este componente maneja la data y se la pasa al de arriba.
 const CartRecommendations: React.FC<{ onAddFromRec: (product: Product) => void }> = ({ onAddFromRec }) => {
-  const { frontConfig } = useApp();
+  const { allProducts } = useApp();
   
   const recommendations = useMemo(() => {
-    const raw = frontConfig?.featured_products?.products || [];
-
-    return raw.map(mapApiProductToLocal).slice(0,4);
-  }, [frontConfig]);
+    // 1. Buscamos en TODOS los productos, filtramos los que el mapper marcó como "Destacado" y agarramos los primeros 4
+    return allProducts
+      .filter(product => product.tags === 'Destacado')
+      .slice(0, 4);
+  }, [allProducts]);
 
   return <RecommendationList products={recommendations} onAddFromRec={onAddFromRec} />;
 };

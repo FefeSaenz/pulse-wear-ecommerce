@@ -1,33 +1,19 @@
+// hooks/useUnifiedProducts.ts (o donde lo tengas)
 import { useMemo } from 'react';
 import { useApp } from '@/src/context/AppContext';
-import { mapApiProductToLocal } from '@/src/utils/mappers';
 
 export const useUnifiedProducts = () => {
-    const { allProducts, frontConfig } = useApp();
+    // Asumo que en tu AppContext.tsx ya estás usando mapApiDressToProduct 
+    // cuando guardás la respuesta de Axios en allProducts.
+    const { allProducts } = useApp();
 
-    const unifiedProducts = useMemo(() => {
-        const catalog = allProducts.map(p => ({ ...p }));
+    // Catálogo completo
+    const unifiedProducts = allProducts;
 
-        const featuredRaw = frontConfig?.featured_products?.products || [];
-        const featuredMapped = featuredRaw.map(mapApiProductToLocal);
+    // Filtramos solo los que el mapper les puso el tag "Destacado"
+    const featuredProducts = useMemo(() => {
+        return allProducts.filter(p => p.tags === 'Destacado');
+    }, [allProducts]);
 
-        // Mezclamos e inyectamos tags
-        featuredMapped.forEach(fProd => {
-            const existingIndex = catalog.findIndex(p => p.id === fProd.id);
-            
-            if (existingIndex === -1) {
-                // Producto fantasma
-                catalog.push(fProd);
-            } else {
-                // Producto existente -> Le pegamos la etiqueta de destacado
-                if (fProd.tags) {
-                    catalog[existingIndex].tags = fProd.tags;
-                }
-            }
-        });
-
-        return catalog;
-    }, [allProducts, frontConfig]);
-
-    return { unifiedProducts };
+    return { unifiedProducts, featuredProducts };
 };

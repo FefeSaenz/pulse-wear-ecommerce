@@ -4,8 +4,7 @@ import { useParams, Link, useOutletContext } from 'react-router-dom';
 // Contexts y Utils de PULSO
 import { useApp } from '@/src/context/AppContext';
 import { useCart } from '@/src/context/CartContext';
-import { mapApiProductToLocal } from '@/src/utils/mappers';
-import { Product } from '@/src/types/product.types'; // Importamos tu tipo real
+import { Product } from '@/src/types/product.types';
 
 // UI Components
 import Price from '@/src/components/ui/Price';
@@ -21,27 +20,14 @@ const ProductDetail: React.FC = () => {
 
   const { setSelectedQuickView } = useOutletContext<ProductDetailContext>();
   
-  const { allProducts, frontConfig, loading } = useApp();
-  const { addToCart } = useCart();
+  const { allProducts, loading } = useApp();
+  const { addToCart, setIsCartOpen } = useCart();
 
-  // 1. BÚSQUEDA Y UNIFICACIÓN DE DATA (Respetando tu mapeo)
-  const product: Product | undefined = useMemo(() => {
-    // Recreamos el catálogo unificado
-    const catalog: Product[] = allProducts.map(p => ({ ...p }));
-    
-    // Traemos los destacados y los mapeamos usando tu función de utils/mappers.ts
-    const featuredRaw = frontConfig?.featured_products?.products || [];
-    const featuredMapped = featuredRaw.map(mapApiProductToLocal);
-
-    featuredMapped.forEach(fProd => {
-      if (!catalog.find(p => p.id === fProd.id)) {
-        catalog.push(fProd);
-      }
-    });
-
-    // Buscamos el producto por slug o id
-    return catalog.find(p => p.slug === slug || p.id === slug);
-  }, [allProducts, frontConfig, slug]);
+  // 1. BÚSQUEDA DIRECTA
+  const product = useMemo(() => {
+    // Buscamos el producto directamente en la lista limpia y unificada
+    return allProducts.find(p => p.slug === slug || p.id === slug);
+  }, [allProducts, slug]);
 
   // 2. ESTADOS LOCALES
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
@@ -76,11 +62,11 @@ const ProductDetail: React.FC = () => {
   }, [product]);
 
   const availableSizes = useMemo(() => {
-    if (!product?.variants || !selectedColor) return [];
-    const variant = product.variants.find(v => v.color.name === selectedColor);
-    // Extraemos los talles usando tu estructura ProductSize
-    return variant ? variant.sizes.map(s => s.size.toString()) : [];
-  }, [product, selectedColor]);
+  if (!product?.variants || !selectedColor) return [];
+  const variant = product.variants.find(v => v.color.name === selectedColor);
+  // Devolvemos los objetos enteros para saber si hay stock
+  return variant ? variant.sizes : []; 
+}, [product, selectedColor]);
 
   // 5. MANEJADOR DEL CARRITO (Respetando tu interfaz CartItem)
   const handleAddToCart = () => {
@@ -90,8 +76,6 @@ const ProductDetail: React.FC = () => {
     }
     
     if (product) {
-      // Construimos el objeto respetando tu Omit<Product, 'variants'> + CartItem extras
-      
       const cartItem = {
         id: product.id,
         slug: product.slug,
@@ -108,7 +92,6 @@ const ProductDetail: React.FC = () => {
         active: product.active,
         rating: product.rating,
         reviews_count: product.reviews_count,
-        // Propiedades específicas de CartItem:
         quantity: 1,
         selectedSize: selectedSize,
         selectedColor: selectedColor,
@@ -116,9 +99,8 @@ const ProductDetail: React.FC = () => {
       };
 
       addToCart(cartItem); 
+      setIsCartOpen(true);
       setError('');
-      // OPCIONAL: Acá podrías disparar la apertura del CartDrawer
-      // onOpenCart(); si lo tuvieras disponible mediante contexto o prop.
     }
   };
 
@@ -145,7 +127,7 @@ const ProductDetail: React.FC = () => {
 
   // 7. RENDERIZADO PRINCIPAL
   return (
-    // Envolvemos todo en un Fragment para poder poner el Carousel AFUERA del contenedor constreñido
+    // Envolvemos todo en un Fragment para poder poner el Carousel AFUERA del contenedor
     <div className='flex flex-col gap-16 pb-16 animate-in fade-in duration-500'>
       <div className="max-w-360 mx-auto px-6 pt-6 md:pt-10 w-full">
         
@@ -153,8 +135,8 @@ const ProductDetail: React.FC = () => {
         <Breadcrumbs 
           className='mb-6 md:mb-10'
           items={[
-            { label: product.category, href: `/category/${product.category.toLowerCase()}` },
-            { label: product.name } // Sin href porque es el actual
+            { label: product.category, href: `/category/${product.category.toLowerCase().replace(/\s+/g, '-')}` },
+            { label: product.name }
           ]} 
         />
 
@@ -164,7 +146,8 @@ const ProductDetail: React.FC = () => {
           <div className="w-full md:w-1/2 flex flex-col md:flex-row gap-4 md:gap-6">
             
             {/* Miniaturas (Desktop: Izquierda Vertical / Mobile: Abajo Horizontal) */}
-            {product.images && product.images.length > 1 && (
+            {/* Miniaturas (Desktop: Izquierda Vertical / Mobile: Abajo Horizontal) */}
+            {product.images && product.images.length > 0 && (
               <div className="flex md:flex-col gap-3 overflow-x-auto md:overflow-y-auto no-scrollbar order-2 md:order-1 w-full md:w-20 lg:w-24 shrink-0 pb-2 md:pb-0">
                 {product.images.map((img: string, idx: number) => (
                   <button 
@@ -172,7 +155,7 @@ const ProductDetail: React.FC = () => {
                     onClick={() => setMainImage(img)}
                     className={`w-20 md:w-full aspect-4/5 shrink-0 transition-all cursor-pointer rounded-sm flex group overflow-hidden ${
                       mainImage === img 
-                        ? 'z-10 p-0 border-0 outline-none appearance-none' 
+                        ? 'z-10 p-0 border-0 outline-none appearance-none ring-2 ring-black ring-offset-1' 
                         : 'hover:opacity-80 p-0 border-0 outline-none appearance-none bg-transparent'
                     }`}
                   >
@@ -283,18 +266,23 @@ const ProductDetail: React.FC = () => {
                   <button className="text-[9px] font-black uppercase tracking-[2px] text-gray-400 underline hover:text-black cursor-pointer">Guía de talles</button>
                 </div>
                 <div className="flex flex-wrap gap-2">
-                  {availableSizes.map(size => (
+                  {availableSizes.map(sizeObj => (
                     <button
-                      key={size}
+                      key={sizeObj.size}
+                      disabled={!sizeObj.available}
                       onClick={() => {
-                        setSelectedSize(size);
+                        setSelectedSize(sizeObj.size.toString());
                         setError('');
                       }}
-                      className={`w-12 h-12 border flex items-center justify-center text-[11px] font-bold transition-all cursor-pointer rounded-sm ${
-                        selectedSize === size ? 'bg-black text-white border-black ring-1 ring-black ring-offset-1' : 'bg-white border-gray-200 hover:border-black text-gray-800'
+                      className={`w-12 h-12 border flex items-center justify-center text-[11px] font-bold transition-all rounded-sm ${
+                        !sizeObj.available 
+                          ? 'bg-gray-100 text-gray-400 border-gray-100 cursor-not-allowed opacity-60 line-through' 
+                          : selectedSize === sizeObj.size.toString() 
+                            ? 'bg-black text-white border-black ring-1 ring-black ring-offset-1 cursor-pointer' 
+                            : 'bg-white border-gray-200 hover:border-black text-gray-800 cursor-pointer'
                       }`}
                     >
-                      {size}
+                      {sizeObj.size}
                     </button>
                   ))}
                 </div>

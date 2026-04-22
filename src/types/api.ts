@@ -1,19 +1,8 @@
-import { Product } from "./product.types";
-// --- ÁTOMOS (Estructuras básicas que se repiten) ---
+// types/api.ts
 
-export interface Link {
-  text?: string;
-  label?: string;
-  url: string;
-}
-
-export interface ImageSet {
-  main: string;
-  gallery: string[];
-}
-
-// --- LAYOUT (Menú y Banners) ---
-
+// ==========================================
+// 1. TIPOS PARA LA UI (Para nuestro menú manual)
+// ==========================================
 export interface SubMenuItem {
   label: string;
   url: string;
@@ -34,59 +23,58 @@ export interface Banner {
   title: string;
   subtitle: string;
   description: string;
-  cta: Link;
+  cta: { url: string; text: string };
   image: string;
   image_mobile?: string;
-  background_color?: string;
-  text_color?: string;
-  start_date?: string;
-  end_date?: string;
+}
+// ==========================================
+// 2. TIPOS DE LA NUEVA API (El backend)
+// ==========================================
+export interface ApiVariant {
+  variant_id: number;
+  variant_hex: string;
+  variant_sku: string;
+  variant_size: string;
+  variant_bound: number;
+  variant_color: string;
+  variant_stock: number | null;
+  variant_picture: string;
 }
 
-// --- PRODUCTOS ---
-
-export interface FeaturedProduct {
-  id: string;
-  name: string;
-  category: string;
-  price: number;
-  original_price: number | null;
-  discount_percentage: number | null;
-  main_image: string;
-  images?: string[];
-  slug: string;
-  badge?: string;
-  url: string;
-  base_sku?: string;
-  brand?: string;
-  material?: string;
+export interface ApiDress {
+  dress_bound: number;
+  dress_slug: string;
+  dress_name: string;
+  dress_description: string;
+  dress_material: string;
+  dress_sku: string;
+  dress_gender: number;
+  dress_brand: number;
+  dress_price: number;
+  dress_highlight: number | null; // 1 = Destacado
+  dress_picture: string;
+  brand_name: string;
+  category_name: string;
+  category_abbreviation: string;
+  dress_variants: ApiVariant[];
 }
 
-// --- ESTRUCTURA GLOBAL ---
-
-export interface FrontConfig {
-  menu: {
-    logo: { text: string; url: string };
-    items: MenuItem[];
-  };
-  banners: Banner[];
-  featured_products: {
-    section_title: string;
-    section_subtitle: string;
-    products: FeaturedProduct[];
-  };
+export interface ApiBanner {
+  link_item_id: number;
+  link_item_bound: number;
+  link_item_type: string;
+  link_item_picture: string;
+  link_item_name: string;
+  link_item_title: string;
+  link_item_href: string;
 }
 
-// Representa la respuesta completa de tu API
 export interface ApiResponse {
   status: number;
   error: boolean;
   msg: string;
   data: {
-    front: FrontConfig;
-    products: {            // <--- Agregamos este objeto intermedio
-      products: Product[]; // <--- El array está acá adentro
-      meta?: any;          // Por si querés guardar el total_products, currency, etc.
-    };
+    banners: ApiBanner[]; 
+    products: ApiDress[]; 
   };
 }

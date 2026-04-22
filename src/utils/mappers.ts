@@ -1,38 +1,74 @@
+// utils/mappers.ts
 import { Product, ProductVariant } from '../types/product.types';
-import { FeaturedProduct } from '../types/api';
+import { ApiDress } from '../types/api';
 
-/*
- * Transforma un producto de la API (destacados) al formato estandarizado que usa la interfaz de UI 'Product'.
-*/
-export const mapApiProductToLocal = (apiProd: FeaturedProduct): Product => {
-  // Creamos una variante "por defecto" para que los filtros de la UI no rompan
-  // al intentar buscar talles en un producto que viene de 'Featured'
-  const defaultVariants: ProductVariant[] = [{
-    color: { name: 'Único', hex: '#000000' },
-    sizes: [
-      { size: 'S', sku: `${apiProd.id}-S`, stock: 1, available: true },
-      { size: 'M', sku: `${apiProd.id}-M`, stock: 1, available: true },
-      { size: 'L', sku: `${apiProd.id}-L`, stock: 1, available: true },
-      { size: 'XL', sku: `${apiProd.id}-XL`, stock: 1, available: true },
-    ]
-  }];
+/**
+ * Adapter Pattern: Transforma un producto de la API al formato estandarizado de la UI.
+ */
+export const mapApiDressToProduct = (apiDress: ApiDress): Product => {
+  // 1. Agrupamos las variantes por el NOMBRE DEL COLOR (para evitar duplicados por distintos HEX)
+  const groupedVariants: Record<string, ProductVariant> = {};
 
+  if (apiDress.dress_variants && apiDress.dress_variants.length > 0) {
+    apiDress.dress_variants.forEach((v) => {
+      // Normalizamos el nombre del color: mayúsculas y sin espacios. Si viene vacío, usamos 'ÚNICO'.
+      const rawColorName = v.variant_color ? v.variant_color.trim().toUpperCase() : '';
+      const colorKey = rawColorName !== '' ? rawColorName : 'ÚNICO';
+      
+      // Fallback de color: Si el backend no manda un HEX válido, pintamos el círculo de gris oscuro (#333)
+      const safeHex = v.variant_hex || '#333333'; 
+
+      if (!groupedVariants[colorKey]) {
+        groupedVariants[colorKey] = {
+          color: {
+            name: colorKey, // Ej: "BLANCO" o "ÚNICO"
+            hex: safeHex,   // Ej: "#f7f7f7" o "#333333"
+            image: v.variant_picture,
+          },
+          sizes: [],
+        };
+      }
+
+      // 2. Metemos el talle adentro de ese color
+      groupedVariants[colorKey].sizes.push({
+        size: v.variant_size,
+        sku: v.variant_sku || apiDress.dress_sku,
+        stock: v.variant_stock !== null ? v.variant_stock : 99,
+        available: v.variant_stock === null || v.variant_stock > 0, // Clave para deshabilitar talles sin stock (Punto 3c)
+      });
+    });
+  } else {
+    // Fallback: Si un producto viene sin variantes desde la API, le creamos una estructura base para no romper la UI
+    groupedVariants['ÚNICO'] = {
+      color: { name: 'ÚNICO', hex: '#333333' },
+      sizes: [{ size: 'U', sku: apiDress.dress_sku, stock: 10, available: true }]
+    };
+  }
+
+  // 3. Devolvemos el producto mapeado correctamente
   return {
-    id: apiProd.id,
-    slug: apiProd.slug,
-    name: apiProd.name,
-    price: apiProd.price,
-    original_price: apiProd.original_price,
-    discount_percentage: apiProd.discount_percentage,
-    // FALLBACK: Si la API no trae 'images', usamos 'main_image' dentro de un array
-    images: apiProd.images || [apiProd.main_image], 
-    category: apiProd.category,
-    description: `Descubrí lo mejor en ${apiProd.category}. Calidad premium Pulso Wear.`, // Placeholder
-    variants: (apiProd as any).variants || defaultVariants, // Prioriza si la API llegara a traer variantes
+    id: apiDress.dress_bound.toString(),
+    slug: apiDress.dress_slug,
+    name: apiDress.dress_name,
+    description: apiDress.dress_description,
+    price: apiDress.dress_price,
+    original_price: null,
+    discount_percentage: null,
+    images: [apiDress.dress_picture], // Por ahora hay 1 sola, luego atacamos el Punto 2
+    category: apiDress.category_name,
+    base_sku: apiDress.dress_sku,
+    brand: apiDress.brand_name,
+    material: apiDress.dress_material,
     active: true,
-    tags: apiProd.badge || undefined,
-    base_sku: apiProd.base_sku || undefined,
-    brand: apiProd.brand || undefined,
-    material: apiProd.material || undefined,
+    tags: apiDress.dress_highlight === 1 ? 'Destacado' : undefined, 
+    variants: Object.values(groupedVariants),
   };
+};
+
+/**
+ * Utilidad extra para extraer categorías únicas del catálogo
+ */
+export const extractUniqueCategories = (products: Product[]): string[] => {
+  const categories = products.map(p => p.category);
+  return Array.from(new Set(categories)); // Elimina duplicados
 };

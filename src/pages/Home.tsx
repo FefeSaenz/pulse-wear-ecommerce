@@ -24,29 +24,14 @@ interface HomeContext {
 
 const Home: React.FC = () => {
     const navigate = useNavigate();
-    const { allProducts, frontConfig, loading } = useApp(); // Data de la API disponible
+    const { allProducts, loading, frontConfig } = useApp(); // Data de la API disponible
     
     const { setSelectedQuickView } = useOutletContext<HomeContext>();
 
     const { handleQuickView } = useQuickView(setSelectedQuickView);
     
-    const { unifiedProducts } = useUnifiedProducts(); // Obtenemos los productos unificados desde el nuevo hook
+    const { featuredProducts } = useUnifiedProducts(); // Obtenemos los productos unificados desde el nuevo hook
     
-    // NORMALIZACIÓN DE PRODUCTOS DESTACADOS
-    // Le pedimos los destacados directamente a unifiedProducts en lugar de mapearlos a mano
-    const featuredMapped = useMemo(() => {
-        const raw = frontConfig?.featured_products?.products || [];
-        
-        // Mantenemos la lógica de limitar a 8 para no hacer la Home infinita.
-        // En vez de mapearlos, los buscamos en la lista unificada.
-        return raw.map(apiProd => {
-            const found = unifiedProducts.find(p => p.id === apiProd.id);
-            // Si por alguna razón no está en unifiedProducts, el hook ya lo agregó ahí.
-            // Así que este find es seguro.
-            return found;
-        }).filter(Boolean) as Product[]; // Filtramos undefined por si acaso y casteamos
-    }, [frontConfig, unifiedProducts]);
-
     // LÓGICA DE OFERTAS PARA EL CARRUSEL ---
     const offersMapped = useMemo(() => {
         return allProducts
@@ -56,18 +41,28 @@ const Home: React.FC = () => {
     
     // LÓGICA DE BANNERS DINÁMICOS CON OVERRIDE LOCAL ---
     const visualBanners = useMemo(() => {
+        // Asumimos que los guardás temporalmente acá hasta que definamos el estado global final
         const apiBanners = frontConfig?.banners || [];
 
-        // Si hay banners en la API, mapeamos y reemplazamos las imágenes por las locales
         if (apiBanners.length > 0) {
-            return apiBanners.map((banner, index) => ({
-                ...banner,
-                // Al primer banner le ponemos banner1, al segundo banner2, el resto queda igual
-                image: index === 0 ? banner1 : index === 1 ? banner2 : banner.image
+            return apiBanners.map((banner: any, index: number) => ({
+                id: banner.link_item_id.toString(),
+                type: 'hero' as const,
+                // Fallbacks: Si no hay título, ponemos uno genérico según el índice
+                title: banner.link_item_title && banner.link_item_title !== `banner_${index + 1}` 
+                        ? banner.link_item_title 
+                        : (index === 0 ? 'NUEVA COLECCIÓN' : 'STREET ESSENTIALS'),
+                subtitle: banner.link_item_description || 'PULSO WEAR',
+                description: '',
+                image: banner.link_item_picture, // ¡Usamos la imagen real de la API!
+                cta: { 
+                    url: banner.link_item_href || '/productos', // Fallback: Si no hay link, a la tienda
+                    text: 'VER PRODUCTOS' 
+                }
             }));
         }
 
-        // Si la API no devuelve banners (fallback), creamos la estructura mínima
+        // Si la API no devuelve NADA, mostramos los locales por seguridad
         return [
             { 
                 id: 'local-1',
@@ -77,15 +72,6 @@ const Home: React.FC = () => {
                 description: '',
                 image: banner1, 
                 cta: { url: '/productos', text: 'EXPLORAR TIENDA' } 
-            },
-            { 
-                id: 'local-2',
-                type: 'hero' as const,
-                title: 'PULSO WEAR', 
-                subtitle: 'DROP EXCLUSIVO', 
-                description: '',
-                image: banner2, 
-                cta: { url: '#', text: 'VER MÁS' } 
             }
         ];
     }, [frontConfig?.banners]);
@@ -101,7 +87,7 @@ const Home: React.FC = () => {
     };
 
     // Evitamos renderizar contenido inconsistente si la API está cargando
-    if (loading && !frontConfig) {
+    if (loading) {
         return (
         <div className="min-h-screen flex items-center justify-center">
             <div className="animate-pulse flex flex-col items-center">
@@ -121,7 +107,7 @@ const Home: React.FC = () => {
 
             <ProductGrid 
                 title='Drops'
-                products={featuredMapped}
+                products={featuredProducts.slice(0, 8)} // Solo mostramos los primeros 8 productos destacados
                 onQuickView={handleQuickView}
                 quantityLabel={false}
                 viewAllLink="/productos"
