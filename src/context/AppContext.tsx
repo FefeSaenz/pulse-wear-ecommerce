@@ -42,7 +42,7 @@ const buildSmartMenu = (categories: string[]): MenuItem[] => {
     {
       id: 3,
       label: 'STORE',
-      url: '/#locations', // CORREGIDO: Navega a la sección en la Home
+      url: '/#locals-section', // CORREGIDO: Navega a la sección en la Home
       active: false,
       icon: null
     }

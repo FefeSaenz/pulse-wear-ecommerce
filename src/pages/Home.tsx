@@ -1,5 +1,5 @@
-import React, { useMemo } from 'react';
-import { useOutletContext, useNavigate } from 'react-router-dom';
+import React, { useMemo, useEffect } from 'react';
+import { useOutletContext, useNavigate, useLocation } from 'react-router-dom';
 
 // Contexts & Hooks
 import { useApp } from '@/src/context/AppContext'; // Consumo de la API
@@ -24,6 +24,7 @@ interface HomeContext {
 
 const Home: React.FC = () => {
     const navigate = useNavigate();
+    const { hash } = useLocation(); // Para detectar anclas en la URL
     const { allProducts, loading, frontConfig } = useApp(); // Data de la API disponible
     
     const { setSelectedQuickView } = useOutletContext<HomeContext>();
@@ -32,6 +33,20 @@ const Home: React.FC = () => {
     
     const { featuredProducts } = useUnifiedProducts(); // Obtenemos los productos unificados desde el nuevo hook
     
+    // AUTO-SCROLL: Si entramos a la Home y hay un ancla, bajamos hasta ahí
+    useEffect(() => {
+        if (hash) {
+            const id = hash.replace('#', '');
+            const element = document.getElementById(id);
+            if (element) {
+                // Pequeño delay para asegurar que el DOM ya pintó el mapa
+                setTimeout(() => {
+                    element.scrollIntoView({ behavior: 'smooth' });
+                }, 200); 
+            }
+        }
+    }, [hash]);
+
     // LÓGICA DE OFERTAS PARA EL CARRUSEL ---
     const offersMapped = useMemo(() => {
         return allProducts

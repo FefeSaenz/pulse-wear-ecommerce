@@ -33,6 +33,7 @@ El proyecto sigue una estructura modular y reactiva para facilitar su mantenimie
 - `Data Unification (Pattern)`: Centralización (Single Source of Truth) de la fusión del catálogo base con los productos destacados, inyectando etiquetas y creando un escudo defensivo (fallback) contra productos no listados por el backend.
 - `Path Aliasing (Pattern)`: Configuración estricta de alias absolutos (@/src/...) para dependencias globales y rutas relativas (./) para módulos locales, garantizando un árbol de importaciones escalable y eliminando el infierno de rutas relativas.
 - `UI Animation System (Pattern)`: Centralización de animaciones y estados de modales (Drawers, Overlays) mediante clases globales de CSS (`@layer components`), delegando las transiciones al motor de estilos para evitar cierres bruscos provocados por la destrucción de componentes en el ciclo de vida de React.
+- `SPA Anchor System (Pattern)`: Implementación de un sistema de navegación híbrido que gestiona transiciones entre rutas y scroll suave hacia anclas internas (`hash`) mediante la sincronización de useLocation y useEffect, garantizando el posicionamiento correcto incluso desde páginas externas.
 
 ## ✅ Logros y Avances
 - [x] **Estado Global:** Migración exitosa a Context API para desacoplar la lógica del carrito de la UI.
@@ -112,6 +113,9 @@ El proyecto sigue una estructura modular y reactiva para facilitar su mantenimie
 - [x] **Migración de Contrato API:** Adaptación exitosa al nuevo esquema de datos del backend mediante la actualización del Patrón Adapter (`mappers.ts`), protegiendo a los componentes de la UI de los cambios estructurales (Single Responsibility Principle).
 - [x] **Normalización de Variantes (Color/Talle):** Refactorización del agrupamiento de variables en el Mapper para unificar colores por nombre (evitando duplicados en la UI por variaciones de código HEX) e inyección de estado `disabled` para talles sin stock.
 - [x] **UI Resiliente y Fallbacks Dinámicos:** Implementación de lógicas de seguridad (Defensive Programming) en `Home`, `Header` y Banners para inyectar contenido dinámico elegante cuando la API envía datos incompletos o nulos, garantizando que el diseño nunca se rompa.
+- [x] **Navegación por Anclas (SPA):** Resolución del sistema de scroll suave hacia el mapa de locales ("Store"), implementando lógica de detección de hash en la Home para asegurar el aterrizaje preciso debajo del Header fijo.
+- [x] **Refactorización de LocationsSection:** Optimización del componente de locales con soporte para scroll-mt (scroll-margin-top) y limpieza de la estructura de visualización del mapa.
+- [x] **Escudo de Datos (Heuristic Mapping):** Implementación de un diccionario de rescate en el Mapper para traducir códigos HEX a nombres de color humanos cuando la API entrega datos incompletos, unificando variantes rotas automáticamente.
 
 ## 🛠️ Próximos Pasos
 - [ ] **Refactorización DRY (Don't Repeat Yourself):** Extracción de lógica repetida de mapeo de catálogos hacia un custom hook (`useUnifiedCatalog`) y creación de componentes atómicos para estados de carga/vacíos.

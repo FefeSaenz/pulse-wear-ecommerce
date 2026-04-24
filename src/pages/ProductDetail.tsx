@@ -146,7 +146,6 @@ const ProductDetail: React.FC = () => {
           <div className="w-full md:w-1/2 flex flex-col md:flex-row gap-4 md:gap-6">
             
             {/* Miniaturas (Desktop: Izquierda Vertical / Mobile: Abajo Horizontal) */}
-            {/* Miniaturas (Desktop: Izquierda Vertical / Mobile: Abajo Horizontal) */}
             {product.images && product.images.length > 0 && (
               <div className="flex md:flex-col gap-3 overflow-x-auto md:overflow-y-auto no-scrollbar order-2 md:order-1 w-full md:w-20 lg:w-24 shrink-0 pb-2 md:pb-0">
                 {product.images.map((img: string, idx: number) => (
@@ -155,7 +154,7 @@ const ProductDetail: React.FC = () => {
                     onClick={() => setMainImage(img)}
                     className={`w-20 md:w-full aspect-4/5 shrink-0 transition-all cursor-pointer rounded-sm flex group overflow-hidden ${
                       mainImage === img 
-                        ? 'z-10 p-0 border-0 outline-none appearance-none ring-2 ring-black ring-offset-1' 
+                        ? 'z-10 p-0 border-0 outline-none appearance-none ' 
                         : 'hover:opacity-80 p-0 border-0 outline-none appearance-none bg-transparent'
                     }`}
                   >
@@ -274,11 +273,11 @@ const ProductDetail: React.FC = () => {
                         setSelectedSize(sizeObj.size.toString());
                         setError('');
                       }}
-                      className={`w-12 h-12 border flex items-center justify-center text-[11px] font-bold transition-all rounded-sm ${
+                      className={`w-12 h-12 border flex items-center justify-center text-[11px] font-bold transition-all  ${
                         !sizeObj.available 
                           ? 'bg-gray-100 text-gray-400 border-gray-100 cursor-not-allowed opacity-60 line-through' 
                           : selectedSize === sizeObj.size.toString() 
-                            ? 'bg-black text-white border-black ring-1 ring-black ring-offset-1 cursor-pointer' 
+                            ? 'bg-black text-white border-black cursor-pointer' 
                             : 'bg-white border-gray-200 hover:border-black text-gray-800 cursor-pointer'
                       }`}
                     >
@@ -320,7 +319,7 @@ const ProductDetail: React.FC = () => {
                   <ul className="text-sm text-gray-500 space-y-2">
                     {product.brand && (
                       <li className="flex items-start">
-                        <span className="font-bold text-gray-800 min-w-20">Marca:</span> 
+                        <span className="font-black  text-gray-800 min-w-20">Marca:</span> 
                         <span>{product.brand}</span>
                       </li>
                     )}

@@ -23,13 +23,21 @@ const Header: React.FC<HeaderProps> = ({ onOpenCart, onOpenProfile, onOpenSearch
    * MANEJADOR DE NAVEGACIÓN
    * Lógica centralizada para manejar el scroll suave o la navegación estándar.
    */
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string, isScroll?: boolean) => {
-    if (isScroll) {
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    const isAnchor = href.includes('#');
+    const isExternalPage = window.location.pathname !== '/';
+
+    if (isAnchor && !isExternalPage) {
+      // CASO A: Ya estamos en la Home. Evitamos recarga y scrolleamos.
       e.preventDefault();
-      const targetId = href.replace('#', '');
-      const element = document.getElementById(targetId);
-      element?.scrollIntoView({ behavior: 'smooth' });
-    }
+      const targetId = href.split('#')[1];
+      document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth' });
+    } 
+    
+    // CASO B: Estamos en otra página. 
+    // NO ejecutamos e.preventDefault(), permitiendo que <Link> nos lleve a "/"
+    // Una vez ahí, el useEffect de la Home que pusimos arriba hará el resto.
+
     setIsMobileMenuOpen(false);
   };
   

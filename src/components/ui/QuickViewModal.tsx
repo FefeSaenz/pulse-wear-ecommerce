@@ -45,7 +45,7 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({ product, onClose, onAdd
       {/* Botón de cerrar específico del diseño QuickView */}
       <button 
         onClick={onClose}
-        className="absolute top-4 right-4 z-20 w-8 h-8 flex items-center justify-center bg-white rounded-full shadow-md text-gray-500 hover:text-black transition-colors"
+        className="absolute top-4 right-4 z-20 w-8 h-8 flex items-center justify-center bg-white rounded-full shadow-md text-gray-500 hover:text-black transition-colors cursor-pointer"
       >
         <i className="fa-solid fa-xmark"></i>
       </button>
@@ -144,11 +144,11 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({ product, onClose, onAdd
                     key={sizeStr}
                     onClick={() => isAvailable && setSelectedSize(sizeStr)}
                     disabled={!isAvailable}
-                    className={`w-12 h-12 border flex items-center justify-center text-[11px] font-bold transition-all rounded-sm ${
+                    className={`w-12 h-12 border flex items-center justify-center text-[11px] font-bold transition-all ${
                       !isAvailable 
                         ? 'bg-gray-100 text-gray-400 border-gray-100 cursor-not-allowed opacity-60 line-through' 
                         : selectedSize === sizeStr 
-                          ? 'bg-black text-white border-black ring-1 ring-black ring-offset-1 cursor-pointer' 
+                          ? 'bg-black text-white  cursor-pointer' 
                           : 'bg-white border-gray-200 hover:border-black text-gray-800 cursor-pointer'
                     }`}
                   >
@@ -181,7 +181,7 @@ const QuickViewModal: React.FC<QuickViewModalProps> = ({ product, onClose, onAdd
               }
             }}
             disabled={!selectedSize}
-            className={`w-full py-5 text-[12px] font-black uppercase tracking-[4px] transition-colors flex items-center justify-center space-x-3 ${
+            className={`w-full py-5 text-[12px] font-black uppercase tracking-[4px] transition-colors flex items-center justify-center space-x-3 cursor-pointer ${
               selectedSize ? 'bg-black text-white hover:bg-gray-900' : 'bg-gray-200 text-gray-400 cursor-not-allowed'
             }`}
           >

@@ -2,50 +2,69 @@
 import { Product, ProductVariant } from '../types/product.types';
 import { ApiDress } from '../types/api';
 
+// 🛟 DICCIONARIO DE RESCATE: Traduce Hex a Palabras si el sistema de gestión falla
+const colorDictionary: Record<string, string> = {
+  '#000000': 'NEGRO',
+  '#ffffff': 'BLANCO',
+  '#f7f7f7': 'BLANCO',
+  '#f5f5f5': 'BLANCO',
+  '#ff0000': 'ROJO',
+  '#0000ff': 'AZUL',
+  // Podés sumar más a futuro si usan otros colores seguido
+};
+
 /**
  * Adapter Pattern: Transforma un producto de la API al formato estandarizado de la UI.
  */
 export const mapApiDressToProduct = (apiDress: ApiDress): Product => {
-  // 1. Agrupamos las variantes por el NOMBRE DEL COLOR (para evitar duplicados por distintos HEX)
   const groupedVariants: Record<string, ProductVariant> = {};
 
   if (apiDress.dress_variants && apiDress.dress_variants.length > 0) {
     apiDress.dress_variants.forEach((v) => {
-      // Normalizamos el nombre del color: mayúsculas y sin espacios. Si viene vacío, usamos 'ÚNICO'.
-      const rawColorName = v.variant_color ? v.variant_color.trim().toUpperCase() : '';
-      const colorKey = rawColorName !== '' ? rawColorName : 'ÚNICO';
       
-      // Fallback de color: Si el backend no manda un HEX válido, pintamos el círculo de gris oscuro (#333)
-      const safeHex = v.variant_hex || '#333333'; 
+      // Aseguramos que el Hex esté en minúsculas para buscarlo en el diccionario
+      const safeHex = (v.variant_hex || '#000000').toLowerCase().trim(); 
+
+      // 1. LIMPIEZA DE COLOR INTELIGENTE
+      let colorName = v.variant_color ? v.variant_color.trim().toUpperCase() : '';
+      
+      // Si el sistema de gestión mandó el nombre vacío, lo adivinamos usando el Hex
+      if (colorName === '') {
+        colorName = colorDictionary[safeHex] || `COLOR ${safeHex.toUpperCase()}`;
+      }
+
+      // Agrupamos usando el nombre final ya corregido
+      const colorKey = colorName;
 
       if (!groupedVariants[colorKey]) {
         groupedVariants[colorKey] = {
           color: {
-            name: colorKey, // Ej: "BLANCO" o "ÚNICO"
-            hex: safeHex,   // Ej: "#f7f7f7" o "#333333"
+            name: colorName, 
+            hex: safeHex,
             image: v.variant_picture,
           },
           sizes: [],
         };
       }
 
-      // 2. Metemos el talle adentro de ese color
+      // 2. MANEJO DE STOCK (Acá ocurre la magia del tachado)
       groupedVariants[colorKey].sizes.push({
         size: v.variant_size,
         sku: v.variant_sku || apiDress.dress_sku,
         stock: v.variant_stock !== null ? v.variant_stock : 99,
-        available: v.variant_stock === null || v.variant_stock > 0, // Clave para deshabilitar talles sin stock (Punto 3c)
+        // Si el backend manda null, se asume stock infinito.
+        // Cuando en el futuro manden 0, available será false y la UI tachará el botón.
+        available: v.variant_stock === null || v.variant_stock > 0, 
       });
     });
   } else {
-    // Fallback: Si un producto viene sin variantes desde la API, le creamos una estructura base para no romper la UI
-    groupedVariants['ÚNICO'] = {
-      color: { name: 'ÚNICO', hex: '#333333' },
+    // Escudo extremo por si mandan un producto sin ninguna variante
+    groupedVariants['NEGRO'] = {
+      color: { name: 'NEGRO', hex: '#000000' },
       sizes: [{ size: 'U', sku: apiDress.dress_sku, stock: 10, available: true }]
     };
   }
 
-  // 3. Devolvemos el producto mapeado correctamente
   return {
     id: apiDress.dress_bound.toString(),
     slug: apiDress.dress_slug,
@@ -54,7 +73,7 @@ export const mapApiDressToProduct = (apiDress: ApiDress): Product => {
     price: apiDress.dress_price,
     original_price: null,
     discount_percentage: null,
-    images: [apiDress.dress_picture], // Por ahora hay 1 sola, luego atacamos el Punto 2
+    images: [apiDress.dress_picture], 
     category: apiDress.category_name,
     base_sku: apiDress.dress_sku,
     brand: apiDress.brand_name,
