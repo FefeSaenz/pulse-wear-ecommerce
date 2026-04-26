@@ -13,6 +13,8 @@ import CartDrawer from '@/src/components/cart/CartDrawer';
 import QuickViewModal from '@/src/components/ui/QuickViewModal';
 import CheckoutModal from '@/src/components/ui/CheckoutModal';
 import UserProfile from '@/src/components/ui/UserProfile';
+import WhatsAppButton from '@/src/components/ui/WhatsAppButton';
+import TermsModal from '@/src/components/ui/TermsModal';
 
 import { Product } from '@/src/types/product.types';
 import SearchOverlay from './SearchOverlay';
@@ -31,6 +33,7 @@ const Layout: React.FC = () => {
     // --- ESTADOS GLOBALES DE UI ---
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
+    const [isTermsOpen, setIsTermsOpen] = useState(false);
     const [selectedQuickView, setSelectedQuickView] = useState<Product | null>(null);
 
     // Manejador de búsqueda: Redirige a la tienda con el parámetro
@@ -75,7 +78,7 @@ const Layout: React.FC = () => {
                 <Outlet context={{ setSelectedQuickView, searchTerm, setSearchTerm }} />
             </main>
 
-            <Footer />
+            <Footer onOpenTerms={() => setIsTermsOpen(true)} />
 
             {/* --- COMPONENTES DE INTERACCIÓN GLOBAL --- */}
             <CartDrawer 
@@ -109,6 +112,13 @@ const Layout: React.FC = () => {
                 onClose={() => setIsProfileOpen(false)}
                 orders={orders}
             />
+
+            {/* NUEVO MODAL DE TÉRMINOS */}
+            <TermsModal 
+                isOpen={isTermsOpen} 
+                onClose={() => setIsTermsOpen(false)} 
+            />
+            <WhatsAppButton />
         </div>
     );
 };

@@ -15,7 +15,11 @@ const INFO_LINKS = [
   { label: 'Contacto', href: '#' },
 ];
 
-const Footer: React.FC = () => {
+interface FooterProps {
+  onOpenTerms: () => void;
+}
+
+const Footer: React.FC<FooterProps> = ({ onOpenTerms }) => {
   const { menuItems } = useApp(); 
   
   /**
@@ -34,11 +38,11 @@ const Footer: React.FC = () => {
   return (
     // Quitamos py-18 y usamos solo pt-20 para controlar el inicio. El final lo cierra el div de copyright.
     <footer className="bg-black text-white pt-20">
-      <div className="max-w-360 mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12">
+      <div className="max-w-360 mx-auto px-6 grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
         
         {/* COLUMNA 1: BRANDING (Logo + Slogan + Etiqueta) */}
         {/* Agregamos un poco de padding top solo en desktop para equilibrar visualmente con los títulos de las otras columnas */}
-        <div className="md:col-span-2 flex flex-col gap-4 justify-start items-start md:pt-2">
+        <div className="md:col-span-6 flex flex-col gap-4 justify-start items-start md:pt-2">
           {/* Logo Principal */}
           <img 
             src={WhiteLogoPulso} 
@@ -55,7 +59,7 @@ const Footer: React.FC = () => {
         </div>
 
         {/* COLUMNA 2: INFO LINKS (Usando NavLink) */}
-        <div>
+        <div className="md:col-span-3">
           <h4 className="text-[11px] font-black uppercase tracking-[3px] mb-6 text-white">/ Info</h4>
           <ul className="flex flex-col space-y-3">
             {menuItems && menuItems.length > 0 ? (
@@ -66,18 +70,56 @@ const Footer: React.FC = () => {
                     //key={item.id}
                     onClick={handleNavClick}
                     showSubmenu={false}
-                    className="text-gray-400! hover:text-white! py-1!"
+                    // Agregamos text-[11px] y tracking-[3px] acá para forzar la igualdad
+                    className="text-[11px] tracking-[3px] text-gray-400! hover:text-white! py-1!"
                   />
                 </li>
               ))
             ) : (
-              <span className="text-[10px] text-gray-300 animate-pulse uppercase tracking-widest">Cargando menú...</span>
+              <span className="text-[11px] text-gray-300 animate-pulse uppercase tracking-widest">Cargando menú...</span>
             )}
+            
+            {/* BOTÓN: TÉRMINOS Y CONDICIONES (Preparado para Modal) */}
+            <li>
+              <button 
+                onClick={onOpenTerms} // TODO: Conectar con estado de Modal
+                className="text-[11px] font-black uppercase tracking-[3px] text-gray-400 hover:text-white transition-colors cursor-pointer text-left w-full py-1"
+              >
+                TÉRMINOS Y CONDICIONES
+              </button>
+            </li>
           </ul>
         </div>
 
-        {/* COLUMNA 3: NEWSLETTER */}
-        <div>
+        {/* COLUMNA 3: REDES SOCIALES (Reemplaza temporalmente al Newsletter) */}
+        <div className="md:col-span-3">
+          <h4 className="text-[11px] font-black uppercase tracking-[3px] mb-6 text-white">/ Seguinos</h4>
+          <ul className="flex flex-col space-y-4">
+            <li>
+              <a href="https://www.instagram.com/pulsowear_/" target="_blank" rel="noreferrer" className="flex items-center gap-3 text-[11px] font-black uppercase tracking-widest text-gray-400 hover:text-white transition-colors group">
+                <i className="fa-brands fa-instagram text-lg group-hover:scale-110 transition-transform"></i> Instagram
+              </a>
+            </li>
+            <li>
+              <a href="https://www.threads.com/@pulsowear_/" target="_blank" rel="noreferrer" className="flex items-center gap-3 text-[11px] font-black uppercase tracking-widest text-gray-400 hover:text-white transition-colors group">
+                <i className="fa-brands fa-threads text-lg group-hover:scale-110 transition-transform"></i> Threads
+              </a>
+            </li>
+            <li>
+              <a href="https://www.tiktok.com/@pulso.pna/" target="_blank" rel="noreferrer" className="flex items-center gap-3 text-[11px] font-black uppercase tracking-widest text-gray-400 hover:text-white transition-colors group">
+                <i className="fa-brands fa-tiktok text-lg group-hover:scale-110 transition-transform"></i> TikTok
+              </a>
+            </li>
+            <li>
+              <a href="https://www.wa.me/5493435311995/" target="_blank" rel="noreferrer" className="flex items-center gap-3 text-[11px] font-black uppercase tracking-widest text-gray-400 hover:text-white transition-colors group">
+                <i className="fa-brands fa-whatsapp text-lg group-hover:scale-110 transition-transform"></i> WhatsApp
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        {/* COLUMNA OCULTA: NEWSLETTER (Comentado para futura implementación) */}
+        {/* <div>
           <h4 className="text-[11px] font-black uppercase tracking-[3px] mb-6 text-white">/ Newsletter</h4>
           <div className="flex border-b border-gray-700 pb-2 group focus-within:border-white transition-colors">
             <input 
@@ -89,7 +131,8 @@ const Footer: React.FC = () => {
               Unirse
             </button>
           </div>
-        </div>
+        </div> 
+        */}
 
       </div>
 

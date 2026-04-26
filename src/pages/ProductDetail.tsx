@@ -306,7 +306,8 @@ const ProductDetail: React.FC = () => {
             {/* Description y Detalles (Type-Safe) */}
             <div className="border-t border-gray-100 pt-8 mt-4 space-y-8">
               <div>
-                <h3 className="text-[10px] font-black uppercase tracking-[2px] text-black mb-4">Descripción</h3>
+                {/* Título unificado a 12px */}
+                <h3 className="text-[12px] font-black uppercase tracking-[2px] text-black mb-4">Descripción</h3>
                 <p className="text-sm text-gray-500 leading-relaxed whitespace-pre-line">
                   {product.description || 'Prenda premium diseñada para el uso urbano diario. Ofrece la combinación ideal entre confort duradero y cortes contemporáneos.'}
                 </p>
@@ -315,36 +316,38 @@ const ProductDetail: React.FC = () => {
               {/* Solo renderiza si hay subcategoría, categoría o género */}
               {(product.brand || product.material || product.category || product.subcategory || product.gender) && (
                 <div>
-                  <h3 className="text-[10px] font-black uppercase tracking-[2px] text-black mb-4">Detalles</h3>
-                  <ul className="text-sm text-gray-500 space-y-2">
+                  {/* Título unificado a 12px */}
+                  <h3 className="text-[12px] font-black uppercase tracking-[2px] text-black mb-4">Detalles</h3>
+                  
+                  <ul className="space-y-3">
                     {product.brand && (
-                      <li className="flex items-start">
-                        <span className="font-black  text-gray-800 min-w-20">Marca:</span> 
-                        <span>{product.brand}</span>
+                      <li className="flex items-center">
+                        <span className="text-[11px] font-black uppercase tracking-[2px] text-black min-w-28">Marca:</span> 
+                        <span className="text-[11px] font-black uppercase tracking-[2px] text-black">{product.brand}</span>
                       </li>
                     )}
                     {product.material && (
-                      <li className="flex items-start">
-                        <span className="font-bold text-gray-800 min-w-20">Material:</span> 
-                        <span>{product.material}</span>
+                      <li className="flex items-center">
+                        <span className="text-[11px] font-black uppercase tracking-[2px] text-black min-w-28">Material:</span> 
+                        <span className="text-[11px] font-black uppercase tracking-[2px] text-black">{product.material}</span>
                       </li>
                     )}
                     {product.category && (
-                      <li className="flex items-start">
-                        <span className="font-bold text-gray-800 min-w-20">Categoría:</span> 
-                        <span className="capitalize">{product.category}</span>
+                      <li className="flex items-center">
+                        <span className="text-[11px] font-black uppercase tracking-[2px] text-black min-w-28">Categoría:</span> 
+                        <span className="text-[11px] font-black uppercase tracking-[2px] text-black">{product.category}</span>
                       </li>
                     )}
                     {product.subcategory && (
-                      <li className="flex items-start">
-                        <span className="font-bold text-gray-800 min-w-20">Estilo:</span> 
-                        <span className="capitalize">{product.subcategory}</span>
+                      <li className="flex items-center">
+                        <span className="text-[11px] font-black uppercase tracking-[2px] text-black min-w-28">Estilo:</span> 
+                        <span className="text-[11px] font-black uppercase tracking-[2px] text-black">{product.subcategory}</span>
                       </li>
                     )}
                     {product.gender && (
-                      <li className="flex items-start">
-                        <span className="font-bold text-gray-800 min-w-20">Género:</span> 
-                        <span className="capitalize">{product.gender}</span>
+                      <li className="flex items-center">
+                        <span className="text-[11px] font-black uppercase tracking-[2px] text-black min-w-28">Género:</span> 
+                        <span className="text-[11px] font-black uppercase tracking-[2px] text-black">{product.gender}</span>
                       </li>
                     )}
                   </ul>

@@ -34,6 +34,8 @@ El proyecto sigue una estructura modular y reactiva para facilitar su mantenimie
 - `Path Aliasing (Pattern)`: Configuración estricta de alias absolutos (@/src/...) para dependencias globales y rutas relativas (./) para módulos locales, garantizando un árbol de importaciones escalable y eliminando el infierno de rutas relativas.
 - `UI Animation System (Pattern)`: Centralización de animaciones y estados de modales (Drawers, Overlays) mediante clases globales de CSS (`@layer components`), delegando las transiciones al motor de estilos para evitar cierres bruscos provocados por la destrucción de componentes en el ciclo de vida de React.
 - `SPA Anchor System (Pattern)`: Implementación de un sistema de navegación híbrido que gestiona transiciones entre rutas y scroll suave hacia anclas internas (`hash`) mediante la sincronización de useLocation y useEffect, garantizando el posicionamiento correcto incluso desde páginas externas.
+- `Modal Wrapper (Pattern)`: Uso del patrón de envoltorio (Wrapper) para centralizar la lógica visual y de comportamiento de las ventanas emergentes (Backdrop Blur, Z-Index, Eventos de Cierre), inyectando el contenido específico de cada vista dinámicamente mediante la prop `children` (ej. CheckoutModal, TermsModal).
+- `Environment Management (Security Pattern)`: Aislamiento de información sensible y datos de contacto (ej. números de WhatsApp) mediante variables de entorno (`.env`), garantizando la seguridad del repositorio público y facilitando la inyección segura durante el despliegue en plataformas como Vercel.
 
 ## ✅ Logros y Avances
 - [x] **Estado Global:** Migración exitosa a Context API para desacoplar la lógica del carrito de la UI.
@@ -116,6 +118,10 @@ El proyecto sigue una estructura modular y reactiva para facilitar su mantenimie
 - [x] **Navegación por Anclas (SPA):** Resolución del sistema de scroll suave hacia el mapa de locales ("Store"), implementando lógica de detección de hash en la Home para asegurar el aterrizaje preciso debajo del Header fijo.
 - [x] **Refactorización de LocationsSection:** Optimización del componente de locales con soporte para scroll-mt (scroll-margin-top) y limpieza de la estructura de visualización del mapa.
 - [x] **Escudo de Datos (Heuristic Mapping):** Implementación de un diccionario de rescate en el Mapper para traducir códigos HEX a nombres de color humanos cuando la API entrega datos incompletos, unificando variantes rotas automáticamente.
+- [x] **Footer Rediseñado:** Implementación de grilla asimétrica (12 columnas), actualización de librería de íconos sociales (FontAwesome) y unificación tipográfica bajo el sistema de diseño streetwear.
+- [x] **Ficha Técnica (PDP):** Reestructuración de los detalles del producto aplicando contraste tipográfico avanzado, mejorando la jerarquía visual de las especificaciones y homologando el diseño.
+- [x] **Botón de WhatsApp Global:** Creación de componente flotante interactivo con animación custom (bounce-pause) y gestión segura de datos a través de variables de entorno integradas en Vite.
+- [x] **Sistema Legal y FAQ:** Desarrollo e integración del Modal de "Términos y Condiciones", conectado globalmente desde el Layout, permitiendo consultar políticas sin abandonar el contexto de navegación de la tienda.
 
 ## 🛠️ Próximos Pasos
 - [ ] **Refactorización DRY (Don't Repeat Yourself):** Extracción de lógica repetida de mapeo de catálogos hacia un custom hook (`useUnifiedCatalog`) y creación de componentes atómicos para estados de carga/vacíos.
