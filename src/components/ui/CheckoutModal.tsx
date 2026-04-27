@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { CartItem, Order } from '@/src/types/product.types';
 import Modal from './Modal';
 import Price from './Price';
+// Agregamos la importación del cliente Axios
+import api from '@/src/api/axios'; 
 
 interface CheckoutModalProps {
   isOpen: boolean;
@@ -26,14 +28,8 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose, cart, on
   
   const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
-  // Si no está abierto, el componente Modal ya se encarga de retornar null, 
-  // pero lo mantenemos acá por seguridad de lógica.
   if (!isOpen) return null;
 
-  /**
-   * VALIDACIÓN DE CAMPOS
-   * Centralizamos la lógica para verificar que el usuario completó lo necesario.
-   */
   const validateStep = () => {
     const newErrors: string[] = [];
     if (step === 1) {
@@ -46,29 +42,17 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose, cart, on
     return newErrors.length === 0;
   };
 
-  /**
-   * MANEJADOR DINÁMICO DE INPUTS
-   * Actualiza el estado del formulario y limpia los errores en tiempo real
-   * para que el usuario reciba feedback inmediato al corregir un campo vacío.
-   */
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, fieldName: keyof typeof formData) => {
     const { value } = e.target;
-    
-    // 1. Actualizamos los datos del formulario
     setFormData((prev) => ({ ...prev, [fieldName]: value }));
 
-    // 2. Validación Dinámica: Si este campo tenía un error, lo limpiamos de inmediato
     if (errors.includes(fieldName)) {
       setErrors((prevErrors) => prevErrors.filter((error) => error !== fieldName));
     }
   };
 
-  /**
-   * MANEJADOR DE PASOS (handleNext)
-   * Lógica blindada para avanzar entre Información -> Pago -> Confirmación
-   */
-  const handleNext = () => {
-    // Limpiamos errores previos al intentar avanzar
+  // Convertimos a función asíncrona para conectarse con la API real
+  const handleNext = async () => {
     setErrors([]);
 
     if (step === 1) {
@@ -77,45 +61,55 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose, cart, on
       }
     } else if (step === 2) {
       setLoading(true);
-      // Simulamos latencia de red para procesar el pago (Senior UX)
-      setTimeout(() => {
-        const newOrder: Order = {
-          id: `ORD-${Math.random().toString(36).substr(2, 7).toUpperCase()}`,
-          date: new Date().toISOString(),
-          items: [...cart],
-          status: 'Procesando',
-          customer: {
-            id: 'GUEST_ID', // Esto luego vendrá del ID de Google Auth/JWT
-            email: formData.email,
-            name: formData.name,
-            phone: formData.phone
-          },
-          summary: {
-            subtotal: total,
-            shipping: 0,
-            discount: 0,
-            total: total
-          },
-          payment: {
-            method: 'MercadoPago',
-            status: 'approved'
-          },
-          shipping: {
-            method: 'Standard',
-            address: formData.address,
-            city: formData.city,
-            zip: formData.zip
-          }
-        };
+      
+      const newOrder: Order = {
+        id: `ORD-${Math.random().toString(36).substr(2, 7).toUpperCase()}`,
+        date: new Date().toISOString(),
+        items: [...cart],
+        status: 'Procesando',
+        customer: {
+          id: 'GUEST_ID', 
+          email: formData.email,
+          name: formData.name,
+          phone: formData.phone
+        },
+        summary: {
+          subtotal: total,
+          shipping: 0,
+          discount: 0,
+          total: total
+        },
+        payment: {
+          method: 'MercadoPago',
+          status: 'approved'
+        },
+        shipping: {
+          method: 'Standard',
+          address: formData.address,
+          city: formData.city,
+          zip: formData.zip
+        }
+      };
 
+      try {
+        // Hacemos el POST real al backend
+        const response = await api.post('/shop/cart/', newOrder);
+        
+        console.log("Pedido enviado con éxito:", response.data);
+        
         setLoading(false);
-        onComplete(newOrder);
-        setStep(3);
-      }, 2000);
+        onComplete(newOrder); // Limpia el carrito a través del Context
+        setStep(3); // Muestra la pantalla final de "¡Pedido Confirmado!"
+      } catch (error) {
+        console.error("Error al enviar el pedido al backend:", error);
+        setLoading(false);
+        
+        // Manejo básico de error (podés mejorarlo visualmente después)
+        alert("Hubo un problema al procesar tu pedido. Intentá nuevamente.");
+      }
     }
   };
 
-  // Helper para aplicar clases de error a los inputs
   const getInputClass = (fieldName: string) => {
     const baseClass = "w-full border-b py-3 text-xs font-bold text-black focus:border-black outline-none uppercase tracking-widest placeholder:text-gray-300 transition-colors";
     const errorClass = errors.includes(fieldName) ? "border-red-500" : "border-gray-200";

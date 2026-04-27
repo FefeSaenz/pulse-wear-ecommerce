@@ -15,6 +15,10 @@ const INFO_LINKS = [
   { label: 'Contacto', href: '#' },
 ];
 
+const phoneNumber = import.meta.env.VITE_WHATSAPP_NUMBER; 
+  const defaultMessage = "¡Hola! Vengo de la tienda online de PULSO y necesito ayuda.";
+  const waLink = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(defaultMessage)}`;
+
 interface FooterProps {
   onOpenTerms: () => void;
 }
@@ -111,7 +115,7 @@ const Footer: React.FC<FooterProps> = ({ onOpenTerms }) => {
               </a>
             </li>
             <li>
-              <a href="https://www.wa.me/5493435311995/" target="_blank" rel="noreferrer" className="flex items-center gap-3 text-[11px] font-black uppercase tracking-widest text-gray-400 hover:text-white transition-colors group">
+              <a href={waLink} target="_blank" rel="noreferrer" className="flex items-center gap-3 text-[11px] font-black uppercase tracking-widest text-gray-400 hover:text-white transition-colors group">
                 <i className="fa-brands fa-whatsapp text-lg group-hover:scale-110 transition-transform"></i> WhatsApp
               </a>
             </li>

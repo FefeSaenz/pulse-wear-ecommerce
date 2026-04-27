@@ -36,6 +36,7 @@ El proyecto sigue una estructura modular y reactiva para facilitar su mantenimie
 - `SPA Anchor System (Pattern)`: Implementación de un sistema de navegación híbrido que gestiona transiciones entre rutas y scroll suave hacia anclas internas (`hash`) mediante la sincronización de useLocation y useEffect, garantizando el posicionamiento correcto incluso desde páginas externas.
 - `Modal Wrapper (Pattern)`: Uso del patrón de envoltorio (Wrapper) para centralizar la lógica visual y de comportamiento de las ventanas emergentes (Backdrop Blur, Z-Index, Eventos de Cierre), inyectando el contenido específico de cada vista dinámicamente mediante la prop `children` (ej. CheckoutModal, TermsModal).
 - `Environment Management (Security Pattern)`: Aislamiento de información sensible y datos de contacto (ej. números de WhatsApp) mediante variables de entorno (`.env`), garantizando la seguridad del repositorio público y facilitando la inyección segura durante el despliegue en plataformas como Vercel.
+- `API Base Routing (Pattern)`: Desacoplamiento del dominio raíz (VITE_API_BASE_URL) de los endpoints específicos (`/shop/cart/`, `/shop/page/`) en la instancia global de Axios. Esto previene conflictos de ruteo, evita falsos errores de CORS (Not Found) y facilita la transición impecable entre entornos de Desarrollo (localhost) y Producción (Vercel).
 
 ## ✅ Logros y Avances
 - [x] **Estado Global:** Migración exitosa a Context API para desacoplar la lógica del carrito de la UI.
@@ -122,10 +123,11 @@ El proyecto sigue una estructura modular y reactiva para facilitar su mantenimie
 - [x] **Ficha Técnica (PDP):** Reestructuración de los detalles del producto aplicando contraste tipográfico avanzado, mejorando la jerarquía visual de las especificaciones y homologando el diseño.
 - [x] **Botón de WhatsApp Global:** Creación de componente flotante interactivo con animación custom (bounce-pause) y gestión segura de datos a través de variables de entorno integradas en Vite.
 - [x] **Sistema Legal y FAQ:** Desarrollo e integración del Modal de "Términos y Condiciones", conectado globalmente desde el Layout, permitiendo consultar políticas sin abandonar el contexto de navegación de la tienda.
+- [x] **Integración Real de Checkout:** Conexión exitosa del flujo de compra con la API. Reemplazo del mock de latencia por una petición POST real a /shop/cart/ enviando el objeto Order completo (cliente, carrito y desglose) listo para ser procesado por el panel de gestión.
+- [x] **Resolución de CORS & Enrutamiento:** Corrección estructural en la configuración de Axios y las variables de entorno para alinear el dominio de despliegue con las políticas de seguridad del navegador (Preflight / OPTIONS).
+- [x] **Securización Estricta y UI Polish:** Eliminación de datos de contacto hardcodeados en el Header migrándolos al sistema centralizado de variables de entorno (.env), acompañado de ajustes de padding asimétrico en el botón flotante de WhatsApp para un centrado óptico perfecto.
 
 ## 🛠️ Próximos Pasos
-- [ ] **Refactorización DRY (Don't Repeat Yourself):** Extracción de lógica repetida de mapeo de catálogos hacia un custom hook (`useUnifiedCatalog`) y creación de componentes atómicos para estados de carga/vacíos.
 - [ ] **Persistencia del Carrito:** Integrar `localStorage` para que el usuario no pierda los productos seleccionados si recarga o cierra la pestaña accidentalmente.
 - [ ] **Autenticación (Autenticación Google/JWT):** Implementar el login de usuarios para reemplazar el `GUEST_ID` temporal y vincular las órdenes directamente con las cuentas reales de los clientes.
 - [ ] **Integración con Pasarela de Pagos:** Conectar el paso 2 del checkout con la API de Mercado Pago (o similar) para procesar transacciones reales.
-- [ ] **Conexión con Panel de Gestión:** Enviar el objeto `Order` finalizado mediante una petición POST al backend que maneja el panel de control del depósito.
