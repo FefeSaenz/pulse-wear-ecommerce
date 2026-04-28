@@ -37,6 +37,7 @@ El proyecto sigue una estructura modular y reactiva para facilitar su mantenimie
 - `Modal Wrapper (Pattern)`: Uso del patrón de envoltorio (Wrapper) para centralizar la lógica visual y de comportamiento de las ventanas emergentes (Backdrop Blur, Z-Index, Eventos de Cierre), inyectando el contenido específico de cada vista dinámicamente mediante la prop `children` (ej. CheckoutModal, TermsModal).
 - `Environment Management (Security Pattern)`: Aislamiento de información sensible y datos de contacto (ej. números de WhatsApp) mediante variables de entorno (`.env`), garantizando la seguridad del repositorio público y facilitando la inyección segura durante el despliegue en plataformas como Vercel.
 - `API Base Routing (Pattern)`: Desacoplamiento del dominio raíz (VITE_API_BASE_URL) de los endpoints específicos (`/shop/cart/`, `/shop/page/`) en la instancia global de Axios. Esto previene conflictos de ruteo, evita falsos errores de CORS (Not Found) y facilita la transición impecable entre entornos de Desarrollo (localhost) y Producción (Vercel).
+- `Client-Side Persistence (Pattern)`: Implementación de almacenamiento local (`localStorage`) acoplado nativamente al Context API mediante un Lazy Initializer y un Watcher (useEffect). Esta arquitectura garantiza la supervivencia del estado del carrito ante recargas accidentales (F5) o cierres de pestaña, operando de forma invisible para los componentes de UI.
 
 ## ✅ Logros y Avances
 - [x] **Estado Global:** Migración exitosa a Context API para desacoplar la lógica del carrito de la UI.
@@ -126,8 +127,8 @@ El proyecto sigue una estructura modular y reactiva para facilitar su mantenimie
 - [x] **Integración Real de Checkout:** Conexión exitosa del flujo de compra con la API. Reemplazo del mock de latencia por una petición POST real a /shop/cart/ enviando el objeto Order completo (cliente, carrito y desglose) listo para ser procesado por el panel de gestión.
 - [x] **Resolución de CORS & Enrutamiento:** Corrección estructural en la configuración de Axios y las variables de entorno para alinear el dominio de despliegue con las políticas de seguridad del navegador (Preflight / OPTIONS).
 - [x] **Securización Estricta y UI Polish:** Eliminación de datos de contacto hardcodeados en el Header migrándolos al sistema centralizado de variables de entorno (.env), acompañado de ajustes de padding asimétrico en el botón flotante de WhatsApp para un centrado óptico perfecto.
+- [x] **Persistencia de Carrito:** Integración exitosa de memoria local en el flujo de compra. Los datos del carrito ahora son persistentes y tolerantes a interrupciones, eliminando la volatilidad de la sesión y protegiendo la intención de compra del usuario.
 
 ## 🛠️ Próximos Pasos
-- [ ] **Persistencia del Carrito:** Integrar `localStorage` para que el usuario no pierda los productos seleccionados si recarga o cierra la pestaña accidentalmente.
 - [ ] **Autenticación (Autenticación Google/JWT):** Implementar el login de usuarios para reemplazar el `GUEST_ID` temporal y vincular las órdenes directamente con las cuentas reales de los clientes.
 - [ ] **Integración con Pasarela de Pagos:** Conectar el paso 2 del checkout con la API de Mercado Pago (o similar) para procesar transacciones reales.

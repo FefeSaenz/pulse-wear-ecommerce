@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import { Product, CartItem, Order } from '../types/product.types';
 
 interface CartContextType {
@@ -20,18 +20,36 @@ interface CartContextType {
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider: React.FC<{children: React.ReactNode}> = ({ children }) => {
-  // --- ESTADOS DE INTERFAZ (Modales movidos a Context para acceso global) ---
+  // --- ESTADOS DE INTERFAZ ---
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
-
-  // --- ESTADOS DE NEGOCIO (Carrito y Pedidos) ---
-  const [cart, setCart] = useState<CartItem[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
+
+  // --- ESTADO DE NEGOCIO: CARRITO CON PERSISTENCIA ---
+  // Lazy initializer: Se ejecuta solo en el primer render para leer el disco duro
+  const [cart, setCart] = useState<CartItem[]>(() => {
+    try {
+      const savedCart = localStorage.getItem('pulso_cart');
+      return savedCart ? JSON.parse(savedCart) : [];
+    } catch (error) {
+      console.error("Error leyendo el carrito de localStorage:", error);
+      return [];
+    }
+  });
+
+  // Efecto Sincronizador: Cada vez que 'cart' cambia, lo guardamos
+  useEffect(() => {
+    try {
+      localStorage.setItem('pulso_cart', JSON.stringify(cart));
+    } catch (error) {
+      console.error("Error guardando el carrito en localStorage:", error);
+    }
+  }, [cart]);
+
 
   /*
     MANEJADORES DEL CARRITO
-    Usamos useCallback para que las funciones no se recreen si no cambian sus dependencias.
    */
   const addToCart = useCallback((newItem: CartItem) => {
     setCart((prev) => {
@@ -70,11 +88,10 @@ export const CartProvider: React.FC<{children: React.ReactNode}> = ({ children }
 
   /*
     FINALIZACIÓN DE COMPRA
-    Registra el nuevo pedido y limpia el carrito de compras.
    */
   const handleCheckoutComplete = (newOrder: Order) => {
     setOrders([newOrder, ...orders]);
-    setCart([]);
+    setCart([]); // Al vaciar el array acá, el useEffect automáticamente borra el localStorage
     setIsCheckoutOpen(false);
   };
 
