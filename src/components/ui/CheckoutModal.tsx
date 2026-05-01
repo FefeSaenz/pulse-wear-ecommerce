@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { CartItem, Order } from '@/src/types/product.types';
+import { toast } from 'sonner';
 import Modal from './Modal';
 import Price from './Price';
-// Agregamos la importación del cliente Axios
 import api from '@/src/api/axios'; 
 
 interface CheckoutModalProps {
@@ -98,14 +98,13 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose, cart, on
         console.log("Pedido enviado con éxito:", response.data);
         
         setLoading(false);
+        toast.success("¡Pedido confirmado con éxito!");
         onComplete(newOrder); // Limpia el carrito a través del Context
         setStep(3); // Muestra la pantalla final de "¡Pedido Confirmado!"
       } catch (error) {
         console.error("Error al enviar el pedido al backend:", error);
         setLoading(false);
-        
-        // Manejo básico de error (podés mejorarlo visualmente después)
-        alert("Hubo un problema al procesar tu pedido. Intentá nuevamente.");
+        toast.error("Hubo un error al procesar tu pedido. Por favor, intentá nuevamente.");
       }
     }
   };
@@ -239,7 +238,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose, cart, on
             {step === 2 && (
               <button 
                 onClick={() => setStep(1)}
-                className="px-8 border border-gray-200 text-[10px] font-black uppercase tracking-[3px] hover:bg-gray-50 text-black transition-colors"
+                className="px-8 border border-gray-200 text-[10px] font-black uppercase tracking-[3px] hover:bg-gray-50 text-black transition-colors cursor-pointer"
               >
                 Atrás
               </button>
@@ -247,7 +246,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose, cart, on
             <button 
               onClick={handleNext}
               disabled={loading}
-              className="flex-1 bg-black text-white py-5 text-[11px] font-black uppercase tracking-[4px] relative flex items-center justify-center transition-all hover:bg-gray-900 active:scale-[0.98] disabled:opacity-50"
+              className="flex-1 bg-black text-white py-5 text-[11px] font-black uppercase tracking-[4px] relative flex items-center justify-center transition-all hover:bg-gray-900 active:scale-[0.98] disabled:opacity-50 cursor-pointer"
             >
               {loading ? (
                 <i className="fa-solid fa-circle-notch fa-spin"></i>

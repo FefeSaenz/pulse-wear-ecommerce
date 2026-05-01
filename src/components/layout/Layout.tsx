@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
+import { Toaster } from 'sonner';
 
 // Contexts
 import { useApp } from '@/src/context/AppContext';
@@ -118,7 +119,27 @@ const Layout: React.FC = () => {
                 isOpen={isTermsOpen} 
                 onClose={() => setIsTermsOpen(false)} 
             />
+
             <WhatsAppButton />
+
+            {/* 2. Toaster global estilizado para Pulso */}
+            {/* Toaster global estilizado para Pulso (Brutalista Forzado) */}
+            <Toaster 
+                position="top-center" // Lo pasamos arriba para que no tape los botones del modal
+                toastOptions={{
+                    // Usamos el modificador "!" de Tailwind para obligar a sobreescribir el diseño por defecto
+                    className: '!bg-black !text-white !border-gray-800 !border !rounded-none !shadow-2xl !font-sans !py-5 !px-6',
+                    classNames: {
+                        // Estilo del texto
+                        title: '!text-[11px] !font-black !uppercase !tracking-[2px]',
+                        // Decoración lateral según el tipo de mensaje
+                        error: '!border-l-4 !border-l-red-600',
+                        success: '!border-l-4 !border-l-[#25D366]',
+                        info: '!border-l-4 !border-l-white',
+                    }
+                }} 
+            />
+            
         </div>
     );
 };

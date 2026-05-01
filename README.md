@@ -128,7 +128,13 @@ El proyecto sigue una estructura modular y reactiva para facilitar su mantenimie
 - [x] **Resolución de CORS & Enrutamiento:** Corrección estructural en la configuración de Axios y las variables de entorno para alinear el dominio de despliegue con las políticas de seguridad del navegador (Preflight / OPTIONS).
 - [x] **Securización Estricta y UI Polish:** Eliminación de datos de contacto hardcodeados en el Header migrándolos al sistema centralizado de variables de entorno (.env), acompañado de ajustes de padding asimétrico en el botón flotante de WhatsApp para un centrado óptico perfecto.
 - [x] **Persistencia de Carrito:** Integración exitosa de memoria local en el flujo de compra. Los datos del carrito ahora son persistentes y tolerantes a interrupciones, eliminando la volatilidad de la sesión y protegiendo la intención de compra del usuario.
+- [x] **Sistema de Notificaciones Global:** Integración de sonner en el Layout principal con diseño customizado (estética Brutalista) para reemplazar alertas nativas y unificar los mensajes de éxito/error en toda la aplicación.
+- [x] **Refactor Inicial de Checkout:** Limpieza preliminar del componente CheckoutModal y actualización del manejo de feedback (UX) implementando el nuevo sistema de toasts, dejándolo listo para la reestructuración de pagos.
 
 ## 🛠️ Próximos Pasos
+- [ ] **Arquitectura MVP Checkout:** Simplificar CheckoutModal para el flujo de pagos manuales (Efectivo/Transferencia) y enviar el POST al endpoint /shop/cart/ real.
+- [ ] **Silent Login & OTP:** Implementar lógica de autenticación passwordless (Mail + Token) e interceptar el JWT del backend para guardarlo en LocalStorage.
+- [ ] **Flujo de Confirmación:** Armar la ruta dinámica /orden/:id que consuma el estado del pedido y genere el link automático hacia WhatsApp.
+- [ ] **Refactor de UserProfile:** Transformar el menú lateral en un Drawer de autenticación de tres estados (Ingreso de Mail -> Validación -> Perfil y Órdenes).
 - [ ] **Autenticación (Autenticación Google/JWT):** Implementar el login de usuarios para reemplazar el `GUEST_ID` temporal y vincular las órdenes directamente con las cuentas reales de los clientes.
 - [ ] **Integración con Pasarela de Pagos:** Conectar el paso 2 del checkout con la API de Mercado Pago (o similar) para procesar transacciones reales.
