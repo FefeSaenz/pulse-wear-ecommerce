@@ -70,14 +70,14 @@ export interface Order {
 */
 
 export interface Order {
-  id: string;                // ID único de la orden (Generado por Backend)
+  id?: string;                // ID único de la orden (Generado por Backend)
   external_reference?: string; // ID de la transacción en la pasarela (ej: Mercado Pago / Stripe)
-  date: string;              // ISO Date
-  status: OrderStatus;
+  date?: string;              // ISO Date
+  status?: OrderStatus;
   
   // --- Datos del Cliente ---
   customer: {
-    id: string;              // UID del usuario (Auth Google/JWT)
+    id?: string;              // UID del usuario (Auth Google/JWT)
     email: string;
     name: string;
     dni_cuit?: string;       // Necesario para facturación legal en Argentina
@@ -94,7 +94,7 @@ export interface Order {
 
   // --- Información de Pago ---
   payment: {
-    method: 'MercadoPago' | 'Transferencia' | 'Tarjeta'; 
+    method: 'MercadoPago' | 'Transferencia' | 'Tarjeta' | 'Efectivo'; 
     status: 'pending' | 'approved' | 'rejected';
     installments?: number;   // Cantidad de cuotas
     last_four?: string;      // Últimos 4 dígitos para control de gestión

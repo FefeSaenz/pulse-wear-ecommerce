@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 
 // Contexts
+import { AuthProvider } from '@/src/context/AuthContext';
 import { AppProvider } from '@/src/context/AppContext';
 import { CartProvider } from '@/src/context/CartContext';
 
@@ -12,6 +13,7 @@ import Layout from '@/src/components/layout/Layout';
 import Home from '@/src/pages/Home';
 import Products from '@/src/pages/Products';
 import ProductDetail from '@/src/pages/ProductDetail';
+import OrderSuccess from '@/src/pages/OrderSuccess';
 
 const AppContent: React.FC = () => {
   // Escuchamos en qué ruta estamos
@@ -48,6 +50,9 @@ const AppContent: React.FC = () => {
         {/* Ruta para el detalle del producto */}
         <Route path="/product/:slug" element={<ProductDetail />} />
 
+        <Route path="/orden/:id" element={<OrderSuccess />} />
+      
+
         {/* Página 404 (Opcional pero recomendado) */}
         <Route 
           path="*" 
@@ -65,13 +70,15 @@ const AppContent: React.FC = () => {
 
 const App: React.FC = () => {
   return (
-    <AppProvider>
-      <CartProvider>
-        <Router basename={import.meta.env.BASE_URL}>
-          <AppContent />
-        </Router>
-      </CartProvider>
-    </AppProvider>
+    <AuthProvider>
+      <AppProvider>
+        <CartProvider>
+          <Router basename={import.meta.env.BASE_URL}>
+            <AppContent />
+          </Router>
+        </CartProvider>
+      </AppProvider>
+    </AuthProvider>
   );
 };
 

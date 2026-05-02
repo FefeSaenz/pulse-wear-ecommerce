@@ -38,6 +38,8 @@ El proyecto sigue una estructura modular y reactiva para facilitar su mantenimie
 - `Environment Management (Security Pattern)`: Aislamiento de información sensible y datos de contacto (ej. números de WhatsApp) mediante variables de entorno (`.env`), garantizando la seguridad del repositorio público y facilitando la inyección segura durante el despliegue en plataformas como Vercel.
 - `API Base Routing (Pattern)`: Desacoplamiento del dominio raíz (VITE_API_BASE_URL) de los endpoints específicos (`/shop/cart/`, `/shop/page/`) en la instancia global de Axios. Esto previene conflictos de ruteo, evita falsos errores de CORS (Not Found) y facilita la transición impecable entre entornos de Desarrollo (localhost) y Producción (Vercel).
 - `Client-Side Persistence (Pattern)`: Implementación de almacenamiento local (`localStorage`) acoplado nativamente al Context API mediante un Lazy Initializer y un Watcher (useEffect). Esta arquitectura garantiza la supervivencia del estado del carrito ante recargas accidentales (F5) o cierres de pestaña, operando de forma invisible para los componentes de UI.
+- `Contexto de Autenticación (AuthContext)`: Implementación de estado global con React Context API para manejar la sesión del usuario (useAuth). Integra sincronización con localStorage para lograr persistencia de sesión entre recargas y facilita el flujo de "Silent Login" en toda la aplicación.
+
 
 ## ✅ Logros y Avances
 - [x] **Estado Global:** Migración exitosa a Context API para desacoplar la lógica del carrito de la UI.
@@ -130,11 +132,15 @@ El proyecto sigue una estructura modular y reactiva para facilitar su mantenimie
 - [x] **Persistencia de Carrito:** Integración exitosa de memoria local en el flujo de compra. Los datos del carrito ahora son persistentes y tolerantes a interrupciones, eliminando la volatilidad de la sesión y protegiendo la intención de compra del usuario.
 - [x] **Sistema de Notificaciones Global:** Integración de sonner en el Layout principal con diseño customizado (estética Brutalista) para reemplazar alertas nativas y unificar los mensajes de éxito/error en toda la aplicación.
 - [x] **Refactor Inicial de Checkout:** Limpieza preliminar del componente CheckoutModal y actualización del manejo de feedback (UX) implementando el nuevo sistema de toasts, dejándolo listo para la reestructuración de pagos.
+- [x] **Refactor de Checkout MVP:** Reestructuración total del CheckoutModal. Implementación de lógica de negocio real: selector de método de entrega (Envío vs. Retiro), campos dinámicos (DNI/CUIT condicionales), y métodos de pago argentinos (MercadoPago, Transferencia, Efectivo) con cálculo automático de descuentos (10% OFF visualizado en vivo).
+- [x] **Pantalla OrderSuccess:** Creación de la vista de recibo de compra (/orden/:id) con estética Brutalista. Incluye el resumen completo del pedido, estado financiero y un generador dinámico de enlaces hacia WhatsApp (wa.me) con un mensaje pre-armado incluyendo el ID de orden y monto total.
+
 
 ## 🛠️ Próximos Pasos
-- [ ] **Arquitectura MVP Checkout:** Simplificar CheckoutModal para el flujo de pagos manuales (Efectivo/Transferencia) y enviar el POST al endpoint /shop/cart/ real.
-- [ ] **Silent Login & OTP:** Implementar lógica de autenticación passwordless (Mail + Token) e interceptar el JWT del backend para guardarlo en LocalStorage.
-- [ ] **Flujo de Confirmación:** Armar la ruta dinámica /orden/:id que consuma el estado del pedido y genere el link automático hacia WhatsApp.
+- [ ] **Conexión Real de OrderSuccess:** Eliminar el mock temporal de la pantalla de éxito y vincular el GET a la URL definitiva del backend para traer los datos vivos del pedido.
+- [ ] **Desarrollo de OTP en UserProfile:** Transformar el menú lateral de perfil en el Drawer de autenticación de 3 pasos (Ingreso de Mail -> Input de PIN de 6 dígitos -> Renderizado de historial de compras).
+- [ ] **Pruebas de Integración (E2E):** Realizar una compra de prueba completa desde el front (agregar al carrito, llenar checkout, confirmar) monitoreando la respuesta exacta del backend para ajustar los IDs y tokens definitivos.
 - [ ] **Refactor de UserProfile:** Transformar el menú lateral en un Drawer de autenticación de tres estados (Ingreso de Mail -> Validación -> Perfil y Órdenes).
+- [ ] **Silent Login & OTP:** Implementar lógica de autenticación passwordless (Mail + Token) e interceptar el JWT del backend para guardarlo en LocalStorage.
 - [ ] **Autenticación (Autenticación Google/JWT):** Implementar el login de usuarios para reemplazar el `GUEST_ID` temporal y vincular las órdenes directamente con las cuentas reales de los clientes.
 - [ ] **Integración con Pasarela de Pagos:** Conectar el paso 2 del checkout con la API de Mercado Pago (o similar) para procesar transacciones reales.
