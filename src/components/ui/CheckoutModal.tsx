@@ -91,6 +91,12 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose, cart, on
     } else if (step === 2) {
       setLoading(true);
       
+      // Mapeamos el carrito y le extirpamos la propiedad 'variants' a cada producto
+      const cleanedItems = cart.map((item) => {
+        const { variants, ...cleanItem } = item as CartItem & { variants?: unknown }; 
+        return cleanItem;
+      });
+
       const newOrder: Order = {
         date: new Date().toISOString(),
         status: 'Procesando',
@@ -116,7 +122,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose, cart, on
           city: shippingMethod === 'Standard' ? formData.city : 'Paraná',
           zip: shippingMethod === 'Standard' ? formData.zip : '3100'
         },
-        items: cart
+        items: cleanedItems
       };
 
       try {
